@@ -543,7 +543,7 @@
   <header class="hero">
     <div class="eyebrow">Highway 101 &amp; 105 &middot; North to South</div>
     <h1>Pacific Coast Yurt Trip Planner</h1>
-    <div class="sub">Every state park yurt campground on the Washington and Oregon coast, arranged in the order you'll actually drive them. Tap a park's + to add nights and build your route.</div>
+    <div class="sub">Every state park yurt campground on the Washington and Oregon coast, plus California coastal yurt rentals, arranged in the order you'll actually drive them. Tap a park's + to add nights and build your route.</div>
   </header>
 
   <div class="filters" id="filters"></div>
@@ -596,6 +596,14 @@ const PARKS = [
   {id:'sunset-bay', name:'Sunset Bay State Park', town:'Coos Bay / Charleston', region:'South', yurts:'8 rustic yurts', blurb:'A sheltered, cliff-ringed cove with calm swimming, and the trailhead for the Shore Acres and Cape Arago loop.', tags:['Sheltered cove','Scenic drive'], parkId:70},
   {id:'bullards-beach', name:'Bullards Beach State Park', town:'Bandon', region:'South', yurts:'13 yurts, some pet-friendly', blurb:'Set inland from the beach for wind protection, near the historic Coquille River Lighthouse and Bandon\'s shops.', tags:['Lighthouse','Horseback riding'], parkId:50},
   {id:'harris-beach', name:'Harris Beach State Park', town:'Brookings', region:'South', yurts:'6 yurts', blurb:'The southernmost coastal campground, with sea stacks offshore and the dramatic Samuel H. Boardman corridor just north.', tags:['Southernmost','Sea stacks'], parkId:58},
+
+  /* --- California --- */
+  {id:'westport-landing', name:'Westport Beach RV Park & Campground', town:'Westport, CA', region:'California', yurts:'Yurts available', blurb:'A private campground on bluffs above the Pacific just north of Fort Bragg, with yurts, RV sites, and direct beach access on the Mendocino Coast.', tags:['Private','Beach access','Mendocino Coast'], url:'https://westportbeachrv.com/'},
+  {id:'bothe-napa', name:'Bothe-Napa Valley State Park', town:'Calistoga, CA', region:'California', yurts:'10 yurts (4 small, 6 large)', blurb:'The only California state park with yurts, tucked in the redwoods of Napa Valley wine country. A scenic detour inland from the coast.', tags:['CA state park','Wine country','Dog-friendly'], url:'https://www.parks.ca.gov/?page_id=477'},
+  {id:'costanoa', name:'Costanoa Lodge', town:'Pescadero, CA', region:'California', yurts:'Canvas yurts, cabins, lodge rooms', blurb:'A coastal resort blending camping and comfort, set on 4,000 acres between redwoods and the Pacific on Highway 1, just an hour south of San Francisco.', tags:['Private','Spa','Hiking'], url:'https://www.costanoa.com/'},
+  {id:'marina-dunes', name:'Marina Dunes RV Park', town:'Marina, CA', region:'California', yurts:'Yurts, cottages, RV sites', blurb:'Yurts and cottages set among the sand dunes just off Highway 1, a short walk from the beach and minutes from Monterey and Cannery Row.', tags:['Private','Near Monterey','Dunes'], url:'https://www.marinadunesrv.com/'},
+  {id:'treebones', name:'Treebones Resort', town:'Big Sur, CA', region:'California', yurts:'16 cliffside yurts', blurb:'The original Big Sur yurt resort — 16 yurts on private redwood decks perched above the Pacific on Highway 1. Adults-only, off-grid, unforgettable.', tags:['Private','Big Sur','Ocean views'], url:'https://www.treebonesresort.com/'},
+  {id:'el-capitan-canyon', name:'El Capitan Canyon', town:'Santa Barbara, CA', region:'California', yurts:'Yurts, cabins, safari tents', blurb:'A luxury camping resort 30 minutes north of Santa Barbara on the Gaviota Coast, with yurts nestled in a canyon a short walk from the beach.', tags:['Private','Santa Barbara','Glamping'], url:'https://elcapitancanyon.com/'},
 ];
 
 function reserveUrl(p){
@@ -631,7 +639,7 @@ tripStartInput.addEventListener('change', () => {
   renderTrip();
 });
 
-const REGIONS = ['All','Washington','North','Central','South'];
+const REGIONS = ['All','Washington','North','Central','South','California'];
 const filtersEl = document.getElementById('filters');
 REGIONS.forEach(r=>{
   const b = document.createElement('button');
@@ -702,7 +710,7 @@ function renderCards(){
           ${p.tags.map(t=>`<span>${t}</span>`).join('')}
         </div>
         <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
-          Reserve at ${p.region === 'Washington' ? 'WA State Parks' : 'Oregon State Parks'}
+          Reserve at ${p.region === 'Washington' ? 'WA State Parks' : p.region === 'California' ? 'Book now' : 'Oregon State Parks'}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
         </a>
       </div>
