@@ -22,16 +22,21 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0; width:100%; overflow-x:hidden; scroll-behavior:smooth;}
+  html{height:-webkit-fill-available;}
   body{
     background:var(--bg-deep);
     color:var(--sand);
     font-family:'Inter',sans-serif;
     min-height:100vh;
+    min-height:-webkit-fill-available;
   }
   .wrap{
     max-width:1200px;
     margin:0 auto;
-    padding:22px 16px 56px;
+    padding:18px 12px 56px;
+  }
+  @media (min-width:600px){
+    .wrap{padding:22px 16px 56px;}
   }
   @media (min-width:900px){
     .wrap{padding:36px 24px 80px;}
@@ -40,9 +45,12 @@
     display:flex;
     flex-direction:column;
     gap:6px;
-    margin-bottom:24px;
+    margin-bottom:18px;
     border-bottom:1px solid var(--line);
-    padding-bottom:20px;
+    padding-bottom:14px;
+  }
+  @media (min-width:600px){
+    header.hero{margin-bottom:24px; padding-bottom:20px;}
   }
   @media (min-width:900px){
     header.hero{margin-bottom:36px; padding-bottom:28px;}
@@ -67,9 +75,12 @@
   }
   .sub{
     color:var(--sand-dim);
-    font-size:15px;
+    font-size:14px;
     max-width:640px;
     line-height:1.5;
+  }
+  @media (min-width:600px){
+    .sub{font-size:15px;}
   }
 
   .layout{
@@ -118,8 +129,16 @@
   .filters{
     display:flex;
     gap:6px;
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
     margin-bottom:18px;
+    padding-bottom:4px;
+  }
+  .filters::-webkit-scrollbar{display:none;}
+  @media (min-width:600px){
+    .filters{flex-wrap:wrap; overflow-x:visible; margin-bottom:18px;}
   }
   @media (min-width:900px){
     .filters{gap:8px; margin-bottom:22px;}
@@ -151,13 +170,16 @@
     background:var(--bg-panel);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:16px 16px 18px;
-    margin-bottom:14px;
+    padding:14px 14px 16px;
+    margin-bottom:12px;
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:12px;
     scroll-margin-top:24px;
     transition:border-color .2s ease, background .2s ease;
+  }
+  @media (min-width:600px){
+    .park-card{padding:16px 16px 18px; margin-bottom:14px; gap:14px;}
   }
   @media (min-width:900px){
     .park-card{
@@ -180,9 +202,12 @@
   }
   .park-name{
     font-family:'Fraunces',serif;
-    font-size:18px;
+    font-size:17px;
     font-weight:600;
     color:var(--sand);
+  }
+  @media (min-width:600px){
+    .park-name{font-size:18px;}
   }
   @media (min-width:900px){
     .park-name{font-size:20px;}
@@ -206,19 +231,25 @@
     .park-region-tag{margin-left:auto;}
   }
   .park-blurb{
-    font-size:14px;
-    line-height:1.55;
+    font-size:13.5px;
+    line-height:1.5;
     color:var(--sand-dim);
-    margin:8px 0 10px;
+    margin:6px 0 8px;
     max-width:60ch;
+  }
+  @media (min-width:600px){
+    .park-blurb{font-size:14px; margin:8px 0 10px;}
   }
   .park-meta{
     display:flex;
-    gap:14px;
+    gap:10px;
     flex-wrap:wrap;
     font-family:'IBM Plex Mono',monospace;
-    font-size:11.5px;
+    font-size:11px;
     color:var(--moss);
+  }
+  @media (min-width:600px){
+    .park-meta{gap:14px; font-size:11.5px;}
   }
   .park-meta span{white-space:nowrap;}
   .reserve-link{
@@ -258,22 +289,30 @@
   .stepper-row{
     display:flex;
     align-items:center;
-    gap:16px;
+    gap:12px;
+  }
+  @media (min-width:600px){
+    .stepper-row{gap:16px;}
   }
   @media (min-width:900px){
     .stepper-row{gap:10px;}
   }
   .stepper button{
-    width:36px;height:36px;
+    width:44px;height:44px;
     border-radius:50%;
     border:1px solid var(--line-strong);
     background:transparent;
     color:var(--sand);
-    font-size:18px;
+    font-size:22px;
     cursor:pointer;
     line-height:1;
     display:flex;align-items:center;justify-content:center;
     transition:all .15s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  @media (min-width:600px){
+    .stepper button{width:36px;height:36px; font-size:18px;}
   }
   @media (min-width:900px){
     .stepper button{width:28px; height:28px; font-size:16px;}
@@ -294,14 +333,20 @@
     text-transform:uppercase;
     letter-spacing:0.06em;
   }
+  @media (max-width:380px){
+    .nights-label{display:none;}
+  }
 
   /* --- Trip panel --- */
   .trip-panel{
     background:var(--bg-panel);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:18px;
-    margin-top:28px;
+    padding:16px;
+    margin-top:22px;
+  }
+  @media (min-width:600px){
+    .trip-panel{padding:18px; margin-top:28px;}
   }
   @media (min-width:900px){
     .trip-panel{
@@ -339,11 +384,13 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
     text-decoration:none;
-    padding:12px;
+    padding:14px 12px;
     border-radius:6px;
     cursor:pointer;
     margin-bottom:18px;
     transition:all .15s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
   .start-trip-btn:hover{background:#ef7148; border-color:#ef7148;}
   .start-trip-btn svg{width:14px; height:14px; flex-shrink:0;}
@@ -366,9 +413,10 @@
     border-radius:6px;
     color:var(--sand);
     font-family:'IBM Plex Mono',monospace;
-    font-size:13px;
-    padding:8px 10px;
+    font-size:16px;
+    padding:10px;
     color-scheme:dark;
+    min-height:44px;
   }
   .date-field input[type="date"]:focus{outline:none; border-color:var(--driftwood);}
   .empty-trip{
@@ -376,9 +424,12 @@
     color:var(--sand-dim);
     border:1px dashed var(--line-strong);
     border-radius:8px;
-    padding:18px;
+    padding:16px;
     text-align:center;
     line-height:1.6;
+  }
+  @media (min-width:600px){
+    .empty-trip{padding:18px;}
   }
   .stop{
     display:flex;
@@ -464,10 +515,12 @@
     font-size:11.5px;
     letter-spacing:0.05em;
     text-transform:uppercase;
-    padding:9px;
+    padding:12px 9px;
     border-radius:6px;
     cursor:pointer;
     transition:all .15s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
   .reset-btn:hover{border-color:var(--buoy); color:var(--buoy);}
 
