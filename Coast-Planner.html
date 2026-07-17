@@ -270,6 +270,34 @@
   .reserve-link:hover{border-bottom-color:var(--buoy); color:#ef7148;}
   .reserve-link svg{width:11px; height:11px; flex-shrink:0;}
 
+  .avail-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .avail-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:6px 12px;
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    background:transparent;
+    color:var(--sand-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .15s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .avail-btn:hover{border-color:var(--moss); color:var(--moss);}
+  .avail-btn svg{width:12px; height:12px; flex-shrink:0;}
+
   .stepper{
     display:flex;
     flex-direction:row;
@@ -583,19 +611,19 @@ const PARKS = [
   {id:'twin-harbors', name:'Twin Harbors State Park', town:'Westport, WA', region:'Washington', yurts:'2 heated yurts, 5 rustic cabins', blurb:'A short walk from the beach on the Shifting Sands Trail, four miles south of Westport\'s fishing docks and charter boats.', tags:['Near Westport','Pet-friendly options'], url:'https://parks.wa.gov/find-parks/state-parks/twin-harbors-state-park'},
   {id:'grayland-beach', name:'Grayland Beach State Park', town:'Grayland, WA', region:'Washington', yurts:'10 yurts, most ADA accessible', blurb:'Grassy dunes give way to 7,449 feet of open ocean frontage — a quiet, less-crowded stretch just south of Westport.', tags:['ADA accessible','Kite flying'], url:'https://parks.wa.gov/find-parks/state-parks/grayland-beach-state-park'},
   {id:'cape-disappointment', name:'Cape Disappointment State Park', town:'Ilwaco, WA', region:'Washington', yurts:'Yurts + historic vacation homes', blurb:'Where the Columbia River meets the Pacific, with two lighthouses and the Lewis & Clark Interpretive Center on a 200-foot bluff.', tags:['Lighthouses','History'], url:'https://parks.wa.gov/find-parks/state-parks/cape-disappointment-state-park'},
-  {id:'fort-stevens', name:'Fort Stevens State Park', town:'Hammond / Astoria', region:'North', yurts:'15 yurts, 11 deluxe cabins', blurb:'A former military fort with a famous shipwreck on the beach, freshwater lake swimming, and nine miles of bike paths.', tags:['Shipwreck','Biking','Lake swimming'], parkId:129},
-  {id:'nehalem-bay', name:'Nehalem Bay State Park', town:'Manzanita', region:'North', yurts:'18 yurts', blurb:'Set on a long sand spit between the bay and the ocean, a short dune walk from a wide, quiet beach.', tags:['Sand spit','Walk to town'], parkId:142},
-  {id:'cape-lookout', name:'Cape Lookout State Park', town:'Tillamook', region:'North', yurts:'13 yurts, 6 deluxe cabins', blurb:'The pick for hikers — the 4.7-mile Cape Lookout Trail cuts through old-growth forest to a cliffside view of the Pacific.', tags:['Best hiking','Whale watching'], parkId:134},
-  {id:'devils-lake', name:"Devil's Lake State Recreation Area", town:'Lincoln City', region:'Central', yurts:'10 yurts', blurb:'The only coastal yurt campground actually inside a town — handy if you want restaurants and shops a short walk away.', tags:['In-town','Freshwater paddling'], parkId:155},
-  {id:'beverly-beach', name:'Beverly Beach State Park', town:'Newport', region:'Central', yurts:'21 rustic yurts', blurb:'The most popular yurt campground on the coast, with direct beach access and whale-watching viewpoints. Books out up to 9 months ahead.', tags:['Most popular','Book early'], parkId:164},
-  {id:'south-beach', name:'South Beach State Park', town:'Newport', region:'Central', yurts:'Yurts available', blurb:'Just across the bay from Beverly Beach, close to the Oregon Coast Aquarium and Yaquina Bay waterfront.', tags:['Near aquarium'], parkId:149},
-  {id:'beachside', name:'Beachside State Recreation Site', town:'Waldport', region:'Central', yurts:'2 yurts (seasonal, Mar 15\u2013Oct 31)', blurb:'A small, quieter alternative to the bigger Newport-area parks, right on an uncrowded stretch of beach.', tags:['Quiet','Small campground'], parkId:84},
-  {id:'honeyman', name:'Jessie M. Honeyman Memorial State Park', town:'Florence', region:'Central', yurts:'Yurts available', blurb:'Wedged between towering sand dunes and two freshwater lakes — the base camp for dune buggy rides and sandboarding.', tags:['Dunes','Two lakes'], parkId:95},
-  {id:'umpqua', name:'Umpqua Lighthouse State Park', town:'Reedsport', region:'South', yurts:'2 rustic + 6 deluxe yurts', blurb:'Home to the only deluxe yurts on the coast with a full kitchenette and TV. Climb the lighthouse and watch for whales.', tags:['Deluxe option','Lighthouse'], parkId:83},
-  {id:'tugman', name:'William M. Tugman State Park', town:'Lakeside', region:'South', yurts:'8 yurts, pet-friendly options', blurb:'Tucked beside calm Eel Lake instead of the open ocean — good for paddling, fishing, and a break from coastal wind.', tags:['Calm lake','Pet-friendly'], parkId:69},
-  {id:'sunset-bay', name:'Sunset Bay State Park', town:'Coos Bay / Charleston', region:'South', yurts:'8 rustic yurts', blurb:'A sheltered, cliff-ringed cove with calm swimming, and the trailhead for the Shore Acres and Cape Arago loop.', tags:['Sheltered cove','Scenic drive'], parkId:70},
-  {id:'bullards-beach', name:'Bullards Beach State Park', town:'Bandon', region:'South', yurts:'13 yurts, some pet-friendly', blurb:'Set inland from the beach for wind protection, near the historic Coquille River Lighthouse and Bandon\'s shops.', tags:['Lighthouse','Horseback riding'], parkId:50},
-  {id:'harris-beach', name:'Harris Beach State Park', town:'Brookings', region:'South', yurts:'6 yurts', blurb:'The southernmost coastal campground, with sea stacks offshore and the dramatic Samuel H. Boardman corridor just north.', tags:['Southernmost','Sea stacks'], parkId:58},
+  {id:'fort-stevens', name:'Fort Stevens State Park', town:'Hammond / Astoria', region:'North', yurts:'15 yurts, 11 deluxe cabins', blurb:'A former military fort with a famous shipwreck on the beach, freshwater lake swimming, and nine miles of bike paths.', tags:['Shipwreck','Biking','Lake swimming'], parkId:129, raParkId:402178},
+  {id:'nehalem-bay', name:'Nehalem Bay State Park', town:'Manzanita', region:'North', yurts:'18 yurts', blurb:'Set on a long sand spit between the bay and the ocean, a short dune walk from a wide, quiet beach.', tags:['Sand spit','Walk to town'], parkId:142, raParkId:402191},
+  {id:'cape-lookout', name:'Cape Lookout State Park', town:'Tillamook', region:'North', yurts:'13 yurts, 6 deluxe cabins', blurb:'The pick for hikers — the 4.7-mile Cape Lookout Trail cuts through old-growth forest to a cliffside view of the Pacific.', tags:['Best hiking','Whale watching'], parkId:134, raParkId:402146},
+  {id:'devils-lake', name:"Devil's Lake State Recreation Area", town:'Lincoln City', region:'Central', yurts:'10 yurts', blurb:'The only coastal yurt campground actually inside a town — handy if you want restaurants and shops a short walk away.', tags:['In-town','Freshwater paddling'], parkId:155, raParkId:402130},
+  {id:'beverly-beach', name:'Beverly Beach State Park', town:'Newport', region:'Central', yurts:'21 rustic yurts', blurb:'The most popular yurt campground on the coast, with direct beach access and whale-watching viewpoints. Books out up to 9 months ahead.', tags:['Most popular','Book early'], parkId:164, raParkId:402126},
+  {id:'south-beach', name:'South Beach State Park', town:'Newport', region:'Central', yurts:'Yurts available', blurb:'Just across the bay from Beverly Beach, close to the Oregon Coast Aquarium and Yaquina Bay waterfront.', tags:['Near aquarium'], parkId:149, raParkId:402165},
+  {id:'beachside', name:'Beachside State Recreation Site', town:'Waldport', region:'Central', yurts:'2 yurts (seasonal, Mar 15\u2013Oct 31)', blurb:'A small, quieter alternative to the bigger Newport-area parks, right on an uncrowded stretch of beach.', tags:['Quiet','Small campground'], parkId:84, raParkId:402155},
+  {id:'honeyman', name:'Jessie M. Honeyman Memorial State Park', town:'Florence', region:'Central', yurts:'Yurts available', blurb:'Wedged between towering sand dunes and two freshwater lakes — the base camp for dune buggy rides and sandboarding.', tags:['Dunes','Two lakes'], parkId:95, raParkId:402334},
+  {id:'umpqua', name:'Umpqua Lighthouse State Park', town:'Reedsport', region:'South', yurts:'2 rustic + 6 deluxe yurts', blurb:'Home to the only deluxe yurts on the coast with a full kitchenette and TV. Climb the lighthouse and watch for whales.', tags:['Deluxe option','Lighthouse'], parkId:83, raParkId:402343},
+  {id:'tugman', name:'William M. Tugman State Park', town:'Lakeside', region:'South', yurts:'8 yurts, pet-friendly options', blurb:'Tucked beside calm Eel Lake instead of the open ocean — good for paddling, fishing, and a break from coastal wind.', tags:['Calm lake','Pet-friendly'], parkId:69, raParkId:402346},
+  {id:'sunset-bay', name:'Sunset Bay State Park', town:'Coos Bay / Charleston', region:'South', yurts:'8 rustic yurts', blurb:'A sheltered, cliff-ringed cove with calm swimming, and the trailhead for the Shore Acres and Cape Arago loop.', tags:['Sheltered cove','Scenic drive'], parkId:70, raParkId:402382},
+  {id:'bullards-beach', name:'Bullards Beach State Park', town:'Bandon', region:'South', yurts:'13 yurts, some pet-friendly', blurb:'Set inland from the beach for wind protection, near the historic Coquille River Lighthouse and Bandon\'s shops.', tags:['Lighthouse','Horseback riding'], parkId:50, raParkId:402398},
+  {id:'harris-beach', name:'Harris Beach State Park', town:'Brookings', region:'South', yurts:'6 yurts', blurb:'The southernmost coastal campground, with sea stacks offshore and the dramatic Samuel H. Boardman corridor just north.', tags:['Southernmost','Sea stacks'], parkId:58, raParkId:405331},
 
   /* --- California --- */
   {id:'westport-landing', name:'Westport Beach RV Park & Campground', town:'Westport, CA', region:'California', yurts:'Yurts available', blurb:'A private campground on bluffs above the Pacific just north of Fort Bragg, with yurts, RV sites, and direct beach access on the Mendocino Coast.', tags:['Private','Beach access','Mendocino Coast'], url:'https://westportbeachrv.com/'},
@@ -607,6 +635,11 @@ const PARKS = [
 ];
 
 function reserveUrl(p){
+  if(p.url) return p.url;
+  return `https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=${p.parkId}`;
+}
+function availUrl(p){
+  if(p.raParkId) return `https://oregonstateparks.reserveamerica.com/unifSearchInterface.do?interface=checkcamp&contractCode=OR&parkId=${p.raParkId}`;
   if(p.url) return p.url;
   return `https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=${p.parkId}`;
 }
@@ -709,10 +742,16 @@ function renderCards(){
           <span>&#9670; ${p.yurts}</span>
           ${p.tags.map(t=>`<span>${t}</span>`).join('')}
         </div>
-        <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
-          Reserve at ${p.region === 'Washington' ? 'WA State Parks' : p.region === 'California' ? 'Book now' : 'Oregon State Parks'}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </a>
+        <div class="avail-row">
+          <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
+            ${p.region === 'Washington' ? 'WA State Parks' : p.region === 'California' ? 'Book now' : 'Oregon State Parks'}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+          <a class="avail-btn" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+            Check availability
+          </a>
+        </div>
       </div>
       <div class="stepper">
         <div class="nights-label">Nights</div>
@@ -763,7 +802,10 @@ function renderTrip(){
           <div class="stop-name">${p.name}</div>
           <div class="stop-nights">${p.town} &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
           ${dateLine}
-          <a class="stop-reserve" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">Reserve &#8599;</a>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+            <a class="stop-reserve" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">Reserve &#8599;</a>
+            <a class="stop-reserve" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer" style="color:var(--moss)">Check availability &#8599;</a>
+          </div>
         </div>
       </div>
       ${arrow}
