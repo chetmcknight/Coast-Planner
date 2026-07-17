@@ -386,30 +386,6 @@
     margin-bottom:16px;
     line-height:1.5;
   }
-  .start-trip-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    width:100%;
-    background:var(--buoy);
-    border:1px solid var(--buoy);
-    color:var(--sand);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    text-decoration:none;
-    padding:14px 12px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-bottom:18px;
-    transition:all .15s ease;
-    touch-action:manipulation;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .start-trip-btn:hover{background:#ef7148; border-color:#ef7148;}
-  .start-trip-btn svg{width:14px; height:14px; flex-shrink:0;}
   .date-field{
     margin-bottom:18px;
   }
@@ -775,7 +751,7 @@
   /* --- Print styles --- */
   @media print{
     body{background:#fff;color:#222;}
-    header.hero, .tabs, .filters, .spine-col, .trip-panel, .stepper, .avail-btn, .reset-btn, .start-trip-btn, .date-field, .itin-print-btn, .itin-header, .itin-days, footer.notes{display:none!important;}
+    header.hero, .tabs, .filters, .spine-col, .trip-panel, .stepper, .avail-btn, .reset-btn, .date-field, .itin-print-btn, .itin-header, .itin-days, footer.notes{display:none!important;}
     .wrap{padding:0;max-width:100%;}
     .view{display:block!important;}
     #browseView{display:none!important;}
@@ -817,10 +793,6 @@
     <div class="trip-panel">
       <h2>Your route</h2>
       <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
-      <a class="start-trip-btn" id="startTripBtn" href="#cardList">
-        Start trip &mdash; browse parks
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
-      </a>
       <div class="date-field">
         <label for="tripStart">Trip start date</label>
         <input type="date" id="tripStart" />
