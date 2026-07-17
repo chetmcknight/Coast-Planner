@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pacific Coast Yurt Trip Planner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#122228;
+    --bg-panel:#1b3138;
+    --bg-panel-hi:#223c44;
+    --sand:#f1e7d3;
+    --sand-dim:#b9c2bd;
+    --driftwood:#b9946a;
+    --buoy:#d9572e;
+    --moss:#7fa583;
+    --line: rgba(241,231,211,0.14);
+    --line-strong: rgba(241,231,211,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; width:100%; overflow-x:hidden; scroll-behavior:smooth;}
+  body{
+    background:var(--bg-deep);
+    color:var(--sand);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:22px 16px 56px;
+  }
+  @media (min-width:900px){
+    .wrap{padding:36px 24px 80px;}
+  }
+  header.hero{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+  }
+  @media (min-width:900px){
+    header.hero{margin-bottom:36px; padding-bottom:28px;}
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--driftwood);
+  }
+  @media (min-width:900px){
+    .eyebrow{font-size:12px;}
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(28px,7vw,50px);
+    margin:2px 0 8px;
+    letter-spacing:-0.01em;
+    color:var(--sand);
+  }
+  .sub{
+    color:var(--sand-dim);
+    font-size:15px;
+    max-width:640px;
+    line-height:1.5;
+  }
+
+  .layout{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .spine-col{display:none;}
+  @media (min-width:900px){
+    .layout{
+      display:grid;
+      grid-template-columns:64px 1fr 300px;
+      gap:0 28px;
+      align-items:start;
+    }
+    .spine-col{display:block;}
+    .trip-panel{margin-top:0;}
+  }
+
+  /* --- Coastline spine --- */
+  .spine-col{
+    position:sticky;
+    top:24px;
+    height:calc(100vh - 48px);
+    min-height:600px;
+  }
+  .spine-col svg{width:100%; height:100%; overflow:visible;}
+  .spine-line{stroke:var(--line-strong); stroke-width:2; fill:none;}
+  .spine-dot{
+    fill:var(--bg-panel);
+    stroke:var(--driftwood);
+    stroke-width:2;
+    cursor:pointer;
+    transition:r .15s ease, fill .15s ease;
+  }
+  .spine-dot.active{fill:var(--buoy); stroke:var(--buoy);}
+  .spine-dot:hover{fill:var(--driftwood);}
+  .spine-region-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9px;
+    fill:var(--sand-dim);
+    letter-spacing:0.08em;
+  }
+
+  /* --- Filters --- */
+  .filters{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  @media (min-width:900px){
+    .filters{gap:8px; margin-bottom:22px;}
+  }
+  .chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid var(--line-strong);
+    background:transparent;
+    color:var(--sand-dim);
+    cursor:pointer;
+    letter-spacing:0.03em;
+    transition:all .15s ease;
+  }
+  @media (min-width:900px){
+    .chip{font-size:12px; padding:7px 14px;}
+  }
+  .chip:hover{border-color:var(--driftwood); color:var(--sand);}
+  .chip.active{
+    background:var(--driftwood);
+    border-color:var(--driftwood);
+    color:var(--bg-deep);
+  }
+
+  /* --- Park cards --- */
+  .park-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 16px 18px;
+    margin-bottom:14px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    scroll-margin-top:24px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  @media (min-width:900px){
+    .park-card{
+      flex-direction:row;
+      justify-content:space-between;
+      padding:20px 22px;
+      gap:20px;
+    }
+  }
+  .park-card.highlight{
+    border-color:var(--buoy);
+    background:var(--bg-panel-hi);
+  }
+  .park-main{flex:1; min-width:0;}
+  .park-name-row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .park-name{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--sand);
+  }
+  @media (min-width:900px){
+    .park-name{font-size:20px;}
+  }
+  .park-town{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--driftwood);
+  }
+  .park-region-tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--sand-dim);
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    padding:2px 6px;
+  }
+  @media (min-width:900px){
+    .park-region-tag{margin-left:auto;}
+  }
+  .park-blurb{
+    font-size:14px;
+    line-height:1.55;
+    color:var(--sand-dim);
+    margin:8px 0 10px;
+    max-width:60ch;
+  }
+  .park-meta{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--moss);
+  }
+  .park-meta span{white-space:nowrap;}
+  .reserve-link{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:14px;
+    padding:4px 0;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--buoy);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .reserve-link:hover{border-bottom-color:var(--buoy); color:#ef7148;}
+  .reserve-link svg{width:11px; height:11px; flex-shrink:0;}
+
+  .stepper{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+    width:100%;
+  }
+  @media (min-width:900px){
+    .stepper{
+      flex-direction:column;
+      justify-content:center;
+      width:auto;
+      min-width:86px;
+    }
+  }
+  .stepper-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  @media (min-width:900px){
+    .stepper-row{gap:10px;}
+  }
+  .stepper button{
+    width:36px;height:36px;
+    border-radius:50%;
+    border:1px solid var(--line-strong);
+    background:transparent;
+    color:var(--sand);
+    font-size:18px;
+    cursor:pointer;
+    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s ease;
+  }
+  @media (min-width:900px){
+    .stepper button{width:28px; height:28px; font-size:16px;}
+  }
+  .stepper button:hover{background:var(--driftwood); border-color:var(--driftwood); color:var(--bg-deep);}
+  .stepper button:disabled{opacity:0.3; cursor:default;}
+  .stepper button:disabled:hover{background:transparent;border-color:var(--line-strong);color:var(--sand);}
+  .nights-count{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:18px;
+    min-width:20px;
+    text-align:center;
+  }
+  .nights-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--sand-dim);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+
+  /* --- Trip panel --- */
+  .trip-panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:18px;
+    margin-top:28px;
+  }
+  @media (min-width:900px){
+    .trip-panel{
+      position:sticky;
+      top:24px;
+      padding:22px;
+      margin-top:0;
+      max-height:calc(100vh - 48px);
+      overflow-y:auto;
+    }
+  }
+  .trip-panel h2{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .trip-panel .trip-sub{
+    font-size:12.5px;
+    color:var(--sand-dim);
+    margin-bottom:16px;
+    line-height:1.5;
+  }
+  .start-trip-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    background:var(--buoy);
+    border:1px solid var(--buoy);
+    color:var(--sand);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:12px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-bottom:18px;
+    transition:all .15s ease;
+  }
+  .start-trip-btn:hover{background:#ef7148; border-color:#ef7148;}
+  .start-trip-btn svg{width:14px; height:14px; flex-shrink:0;}
+  .date-field{
+    margin-bottom:18px;
+  }
+  .date-field label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--sand-dim);
+    margin-bottom:6px;
+  }
+  .date-field input[type="date"]{
+    width:100%;
+    background:var(--bg-deep);
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    color:var(--sand);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    padding:8px 10px;
+    color-scheme:dark;
+  }
+  .date-field input[type="date"]:focus{outline:none; border-color:var(--driftwood);}
+  .empty-trip{
+    font-size:13px;
+    color:var(--sand-dim);
+    border:1px dashed var(--line-strong);
+    border-radius:8px;
+    padding:18px;
+    text-align:center;
+    line-height:1.6;
+  }
+  .stop{
+    display:flex;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .stop:last-child{border-bottom:none;}
+  .stop-idx{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--buoy);
+    font-size:13px;
+    padding-top:2px;
+  }
+  .stop-body{flex:1;}
+  .stop-name{font-size:14px; font-weight:600; color:var(--sand);}
+  .stop-nights{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--moss);
+    margin-top:2px;
+  }
+  .stop-dates{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--driftwood);
+    margin-top:1px;
+  }
+  .arrow{
+    text-align:center;
+    color:var(--driftwood);
+    font-size:12px;
+    padding:2px 0;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .stop-reserve{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--buoy);
+    text-decoration:none;
+    letter-spacing:0.03em;
+  }
+  .stop-reserve:hover{text-decoration:underline;}
+
+  .totals{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid var(--line-strong);
+  }
+  .totals-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    margin-bottom:6px;
+    color:var(--sand-dim);
+  }
+  .totals-row strong{color:var(--sand); font-weight:500;}
+  .budget-bar{
+    height:6px;
+    border-radius:3px;
+    background:rgba(241,231,211,0.1);
+    margin:10px 0 6px;
+    overflow:hidden;
+  }
+  .budget-fill{
+    height:100%;
+    border-radius:3px;
+    background:var(--moss);
+    transition:width .25s ease, background .25s ease;
+  }
+  .budget-msg{
+    font-size:11.5px;
+    color:var(--sand-dim);
+  }
+  .reset-btn{
+    margin-top:16px;
+    width:100%;
+    background:transparent;
+    border:1px solid var(--line-strong);
+    color:var(--sand-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:9px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .reset-btn:hover{border-color:var(--buoy); color:var(--buoy);}
+
+  footer.notes{
+    margin-top:56px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--sand-dim);
+    line-height:1.7;
+    max-width:760px;
+  }
+  footer.notes strong{color:var(--sand);}
+  #cardList{scroll-margin-top:16px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Highway 101 &amp; 105 &middot; North to South</div>
+    <h1>Pacific Coast Yurt Trip Planner</h1>
+    <div class="sub">Every state park yurt campground on the Washington and Oregon coast, arranged in the order you'll actually drive them. Tap a park's + to add nights and build your route.</div>
+  </header>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="layout">
+    <div class="spine-col">
+      <svg id="spineSvg" viewBox="0 0 64 900" preserveAspectRatio="none"></svg>
+    </div>
+
+    <div id="cardList"></div>
+
+    <div class="trip-panel">
+      <h2>Your route</h2>
+      <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
+      <a class="start-trip-btn" id="startTripBtn" href="#cardList">
+        Start trip &mdash; browse parks
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
+      </a>
+      <div class="date-field">
+        <label for="tripStart">Trip start date</label>
+        <input type="date" id="tripStart" />
+      </div>
+      <div id="tripBody"></div>
+      <div class="totals" id="totalsBody"></div>
+      <button class="reset-btn" id="resetBtn">Clear trip</button>
+    </div>
+  </div>
+
+  <footer class="notes">
+    <strong>Before you book:</strong> each park card links to its official state parks page with a reservation button. For Oregon parks, call 800-452-5687; for Washington parks, call (888) 226-7688. Yurts are popular and fill up fast — some (like Beverly Beach) get reserved up to nine months out. Rustic yurts run roughly $42&ndash;$62/night plus lodging tax; deluxe yurts (private bath, kitchenette) run $81&ndash;$99. Bring your own bedding — beds have vinyl mattresses only, and cooking indoors is limited to deluxe units with a provided microwave. Washington's coastal parks also require a Discover Pass for day-use vehicle entry (not needed if you're staying overnight in a yurt).
+  </footer>
+</div>
+
+<script>
+const PARKS = [
+  {id:'pacific-beach', name:'Pacific Beach State Park', town:'Pacific Beach, WA', region:'Washington', yurts:'2 yurts', blurb:'A remote stretch of North Beach popular for razor clamming and storm-watching. Both yurts are a short walk to the sand.', tags:['Storm watching','Razor clamming'], url:'https://parks.wa.gov/find-parks/state-parks/pacific-beach-state-park'},
+  {id:'twin-harbors', name:'Twin Harbors State Park', town:'Westport, WA', region:'Washington', yurts:'2 heated yurts, 5 rustic cabins', blurb:'A short walk from the beach on the Shifting Sands Trail, four miles south of Westport\'s fishing docks and charter boats.', tags:['Near Westport','Pet-friendly options'], url:'https://parks.wa.gov/find-parks/state-parks/twin-harbors-state-park'},
+  {id:'grayland-beach', name:'Grayland Beach State Park', town:'Grayland, WA', region:'Washington', yurts:'10 yurts, most ADA accessible', blurb:'Grassy dunes give way to 7,449 feet of open ocean frontage — a quiet, less-crowded stretch just south of Westport.', tags:['ADA accessible','Kite flying'], url:'https://parks.wa.gov/find-parks/state-parks/grayland-beach-state-park'},
+  {id:'cape-disappointment', name:'Cape Disappointment State Park', town:'Ilwaco, WA', region:'Washington', yurts:'Yurts + historic vacation homes', blurb:'Where the Columbia River meets the Pacific, with two lighthouses and the Lewis & Clark Interpretive Center on a 200-foot bluff.', tags:['Lighthouses','History'], url:'https://parks.wa.gov/find-parks/state-parks/cape-disappointment-state-park'},
+  {id:'fort-stevens', name:'Fort Stevens State Park', town:'Hammond / Astoria', region:'North', yurts:'15 yurts, 11 deluxe cabins', blurb:'A former military fort with a famous shipwreck on the beach, freshwater lake swimming, and nine miles of bike paths.', tags:['Shipwreck','Biking','Lake swimming'], parkId:129},
+  {id:'nehalem-bay', name:'Nehalem Bay State Park', town:'Manzanita', region:'North', yurts:'18 yurts', blurb:'Set on a long sand spit between the bay and the ocean, a short dune walk from a wide, quiet beach.', tags:['Sand spit','Walk to town'], parkId:142},
+  {id:'cape-lookout', name:'Cape Lookout State Park', town:'Tillamook', region:'North', yurts:'13 yurts, 6 deluxe cabins', blurb:'The pick for hikers — the 4.7-mile Cape Lookout Trail cuts through old-growth forest to a cliffside view of the Pacific.', tags:['Best hiking','Whale watching'], parkId:134},
+  {id:'devils-lake', name:"Devil's Lake State Recreation Area", town:'Lincoln City', region:'Central', yurts:'10 yurts', blurb:'The only coastal yurt campground actually inside a town — handy if you want restaurants and shops a short walk away.', tags:['In-town','Freshwater paddling'], parkId:155},
+  {id:'beverly-beach', name:'Beverly Beach State Park', town:'Newport', region:'Central', yurts:'21 rustic yurts', blurb:'The most popular yurt campground on the coast, with direct beach access and whale-watching viewpoints. Books out up to 9 months ahead.', tags:['Most popular','Book early'], parkId:164},
+  {id:'south-beach', name:'South Beach State Park', town:'Newport', region:'Central', yurts:'Yurts available', blurb:'Just across the bay from Beverly Beach, close to the Oregon Coast Aquarium and Yaquina Bay waterfront.', tags:['Near aquarium'], parkId:149},
+  {id:'beachside', name:'Beachside State Recreation Site', town:'Waldport', region:'Central', yurts:'2 yurts (seasonal, Mar 15\u2013Oct 31)', blurb:'A small, quieter alternative to the bigger Newport-area parks, right on an uncrowded stretch of beach.', tags:['Quiet','Small campground'], parkId:84},
+  {id:'honeyman', name:'Jessie M. Honeyman Memorial State Park', town:'Florence', region:'Central', yurts:'Yurts available', blurb:'Wedged between towering sand dunes and two freshwater lakes — the base camp for dune buggy rides and sandboarding.', tags:['Dunes','Two lakes'], parkId:95},
+  {id:'umpqua', name:'Umpqua Lighthouse State Park', town:'Reedsport', region:'South', yurts:'2 rustic + 6 deluxe yurts', blurb:'Home to the only deluxe yurts on the coast with a full kitchenette and TV. Climb the lighthouse and watch for whales.', tags:['Deluxe option','Lighthouse'], parkId:83},
+  {id:'tugman', name:'William M. Tugman State Park', town:'Lakeside', region:'South', yurts:'8 yurts, pet-friendly options', blurb:'Tucked beside calm Eel Lake instead of the open ocean — good for paddling, fishing, and a break from coastal wind.', tags:['Calm lake','Pet-friendly'], parkId:69},
+  {id:'sunset-bay', name:'Sunset Bay State Park', town:'Coos Bay / Charleston', region:'South', yurts:'8 rustic yurts', blurb:'A sheltered, cliff-ringed cove with calm swimming, and the trailhead for the Shore Acres and Cape Arago loop.', tags:['Sheltered cove','Scenic drive'], parkId:70},
+  {id:'bullards-beach', name:'Bullards Beach State Park', town:'Bandon', region:'South', yurts:'13 yurts, some pet-friendly', blurb:'Set inland from the beach for wind protection, near the historic Coquille River Lighthouse and Bandon\'s shops.', tags:['Lighthouse','Horseback riding'], parkId:50},
+  {id:'harris-beach', name:'Harris Beach State Park', town:'Brookings', region:'South', yurts:'6 yurts', blurb:'The southernmost coastal campground, with sea stacks offshore and the dramatic Samuel H. Boardman corridor just north.', tags:['Southernmost','Sea stacks'], parkId:58},
+];
+
+function reserveUrl(p){
+  if(p.url) return p.url;
+  return `https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=${p.parkId}`;
+}
+
+const state = {};
+PARKS.forEach(p => state[p.id] = 0);
+let activeFilter = 'All';
+let highlightId = null;
+let tripStart = null;
+
+const fmtDate = (d) => d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+const fmtShort = (d) => d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+function addDays(date, days){
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+function parseLocalDate(str){
+  // str is "YYYY-MM-DD" from <input type=date>; parse as local, not UTC
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+
+const tripStartInput = document.getElementById('tripStart');
+const today = new Date();
+const todayIso = today.toISOString().slice(0,10);
+tripStartInput.min = todayIso;
+tripStartInput.addEventListener('change', () => {
+  tripStart = tripStartInput.value ? parseLocalDate(tripStartInput.value) : null;
+  renderTrip();
+});
+
+const REGIONS = ['All','Washington','North','Central','South'];
+const filtersEl = document.getElementById('filters');
+REGIONS.forEach(r=>{
+  const b = document.createElement('button');
+  b.className = 'chip' + (r==='All' ? ' active' : '');
+  b.textContent = r === 'All' ? 'All parks' : r + ' Coast';
+  b.onclick = () => { activeFilter = r; renderFilters(); renderCards(); renderSpine(); };
+  b.dataset.region = r;
+  filtersEl.appendChild(b);
+});
+function renderFilters(){
+  [...filtersEl.children].forEach(c => c.classList.toggle('active', c.dataset.region === activeFilter));
+}
+
+function visibleParks(){
+  return activeFilter === 'All' ? PARKS : PARKS.filter(p => p.region === activeFilter);
+}
+
+function renderSpine(){
+  const svg = document.getElementById('spineSvg');
+  const parks = visibleParks();
+  const n = parks.length;
+  const top = 20, bottom = 880;
+  const step = n > 1 ? (bottom - top) / (n - 1) : 0;
+  let html = `<path class="spine-line" d="M32 ${top} L32 ${bottom}" />`;
+  let lastRegion = null;
+  parks.forEach((p, i) => {
+    const y = top + step * i;
+    if(p.region !== lastRegion){
+      html += `<text class="spine-region-label" x="4" y="${y-8}">${p.region.toUpperCase()}</text>`;
+      lastRegion = p.region;
+    }
+    const isActive = state[p.id] > 0 || highlightId === p.id;
+    html += `<circle class="spine-dot${isActive?' active':''}" cx="32" cy="${y}" r="${state[p.id]>0?7:5}" data-id="${p.id}" />`;
+  });
+  svg.innerHTML = html;
+  svg.querySelectorAll('.spine-dot').forEach(dot=>{
+    dot.addEventListener('click', ()=>{
+      const el = document.getElementById('card-'+dot.dataset.id);
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); flashCard(dot.dataset.id); }
+    });
+  });
+}
+
+function flashCard(id){
+  highlightId = id;
+  renderCards();
+  setTimeout(()=>{ highlightId = null; renderCards(); }, 1200);
+}
+
+function renderCards(){
+  const list = document.getElementById('cardList');
+  list.innerHTML = '';
+  visibleParks().forEach(p=>{
+    const nights = state[p.id];
+    const card = document.createElement('div');
+    card.className = 'park-card' + (highlightId===p.id ? ' highlight' : '');
+    card.id = 'card-'+p.id;
+    card.innerHTML = `
+      <div class="park-main">
+        <div class="park-name-row">
+          <span class="park-name">${p.name}</span>
+          <span class="park-town">${p.town}</span>
+          <span class="park-region-tag">${p.region} Coast</span>
+        </div>
+        <div class="park-blurb">${p.blurb}</div>
+        <div class="park-meta">
+          <span>&#9670; ${p.yurts}</span>
+          ${p.tags.map(t=>`<span>${t}</span>`).join('')}
+        </div>
+        <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
+          Reserve at ${p.region === 'Washington' ? 'WA State Parks' : 'Oregon State Parks'}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+        </a>
+      </div>
+      <div class="stepper">
+        <div class="nights-label">Nights</div>
+        <div class="stepper-row">
+          <button data-action="minus" data-id="${p.id}" ${nights===0?'disabled':''}>&minus;</button>
+          <span class="nights-count">${nights}</span>
+          <button data-action="plus" data-id="${p.id}">+</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll('button[data-action]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.id;
+      if(btn.dataset.action === 'plus') state[id] = Math.min(state[id]+1, 14);
+      else state[id] = Math.max(state[id]-1, 0);
+      renderCards();
+      renderSpine();
+      renderTrip();
+    });
+  });
+}
+
+function renderTrip(){
+  const body = document.getElementById('tripBody');
+  const totals = document.getElementById('totalsBody');
+  const selected = PARKS.filter(p => state[p.id] > 0);
+
+  if(selected.length === 0){
+    body.innerHTML = `<div class="empty-trip">No stops yet. Add nights to any park to start building your route.</div>`;
+    totals.innerHTML = '';
+    return;
+  }
+
+  body.innerHTML = selected.map((p,i)=>{
+    const arrow = i < selected.length-1 ? `<div class="arrow">&#8595;</div>` : '';
+    let dateLine = '';
+    if(tripStart){
+      const checkIn = addDays(tripStart, cumulativeNightsBefore(selected, i));
+      const checkOut = addDays(checkIn, state[p.id]);
+      dateLine = `<div class="stop-dates">${fmtShort(checkIn)} \u2192 ${fmtShort(checkOut)}</div>`;
+    }
+    return `
+      <div class="stop">
+        <div class="stop-idx">${String(i+1).padStart(2,'0')}</div>
+        <div class="stop-body">
+          <div class="stop-name">${p.name}</div>
+          <div class="stop-nights">${p.town} &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
+          ${dateLine}
+          <a class="stop-reserve" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">Reserve &#8599;</a>
+        </div>
+      </div>
+      ${arrow}
+    `;
+  }).join('');
+
+  const totalNights = selected.reduce((s,p)=>s+state[p.id],0);
+  const target = [4,6];
+  const pct = Math.min(100, Math.round((totalNights/target[1])*100));
+  let msg, color;
+  if(totalNights < target[0]){ msg = `${target[0]-totalNights} more night${target[0]-totalNights>1?'s':''} to reach a typical 4\u20136 night trip.`; color='var(--driftwood)'; }
+  else if(totalNights <= target[1]){ msg = `Right in the sweet spot for a 4\u20136 night coastal trip.`; color='var(--moss)'; }
+  else { msg = `Longer than a typical 4\u20136 night trip \u2014 ambitious! Consider trimming a stop or two.`; color='var(--buoy)'; }
+
+  let dateRow = '';
+  if(tripStart){
+    const endDate = addDays(tripStart, totalNights);
+    dateRow = `<div class="totals-row"><span>Dates</span><strong>${fmtShort(tripStart)} \u2013 ${fmtShort(endDate)}</strong></div>`;
+  }
+
+  totals.innerHTML = `
+    <div class="totals-row"><span>Stops</span><strong>${selected.length}</strong></div>
+    <div class="totals-row"><span>Total nights</span><strong>${totalNights}</strong></div>
+    ${dateRow}
+    <div class="budget-bar"><div class="budget-fill" style="width:${pct}%; background:${color};"></div></div>
+    <div class="budget-msg">${msg}</div>
+  `;
+}
+
+function cumulativeNightsBefore(selected, index){
+  let sum = 0;
+  for(let i=0;i<index;i++) sum += state[selected[i].id];
+  return sum;
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  PARKS.forEach(p => state[p.id] = 0);
+  tripStart = null;
+  tripStartInput.value = '';
+  renderCards(); renderSpine(); renderTrip();
+});
+
+renderFilters();
+renderCards();
+renderSpine();
+renderTrip();
+</script>
+</body>
+</html>
