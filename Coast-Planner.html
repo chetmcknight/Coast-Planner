@@ -563,6 +563,240 @@
   }
   footer.notes strong{color:var(--sand);}
   #cardList{scroll-margin-top:16px;}
+
+  /* --- Tabs --- */
+  .tabs{
+    display:flex;
+    gap:4px;
+    margin-bottom:18px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:0;
+  }
+  .tab{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:8px 14px;
+    border:none;
+    background:transparent;
+    color:var(--sand-dim);
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+    transition:all .15s ease;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  @media (min-width:600px){
+    .tab{font-size:13px; padding:10px 18px;}
+  }
+  .tab:hover{color:var(--sand);}
+  .tab.active{color:var(--buoy); border-bottom-color:var(--buoy);}
+
+  /* --- Browse / Itinerary views --- */
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* --- Itinerary --- */
+  .itin-empty{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--sand-dim);
+    font-size:14px;
+    line-height:1.6;
+  }
+  .itin-empty svg{width:40px; height:40px; opacity:0.4; margin-bottom:12px;}
+  .itin-header{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .itin-header h2{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .itin-header .itin-meta{
+    font-size:13px;
+    color:var(--sand-dim);
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .itin-header .itin-meta strong{color:var(--sand);}
+  .itin-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .itin-print-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:7px 14px;
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    background:transparent;
+    color:var(--sand-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .itin-print-btn:hover{border-color:var(--sand); color:var(--sand);}
+  .itin-print-btn svg{width:14px; height:14px;}
+
+  .itin-stop{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:18px 20px;
+    margin-bottom:14px;
+    border-left:3px solid var(--buoy);
+  }
+  .itin-stop-header{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .itin-stop-idx{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    font-weight:600;
+    color:var(--buoy);
+  }
+  .itin-stop-name{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--sand);
+  }
+  .itin-stop-town{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--driftwood);
+  }
+  .itin-stop-region{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--sand-dim);
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    padding:2px 6px;
+    margin-left:auto;
+  }
+  .itin-stop-dates{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--moss);
+    margin-bottom:8px;
+  }
+  .itin-stop-dates strong{color:var(--sand); font-weight:500;}
+  .itin-stop-tags{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+  .itin-stop-tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--sand-dim);
+    background:rgba(241,231,211,0.06);
+    border-radius:4px;
+    padding:2px 8px;
+  }
+  .itin-stop-links{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  /* --- Day-by-day timeline --- */
+  .itin-days{
+    margin-top:24px;
+    border-top:1px solid var(--line);
+    padding-top:18px;
+  }
+  .itin-days-title{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--sand-dim);
+    margin-bottom:12px;
+  }
+  .itin-day{
+    display:flex;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+    font-size:13px;
+    align-items:center;
+  }
+  .itin-day:last-child{border-bottom:none;}
+  .itin-day-num{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--buoy);
+    font-weight:600;
+    min-width:44px;
+    font-size:12px;
+  }
+  .itin-day-date{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--sand-dim);
+    min-width:80px;
+    font-size:11.5px;
+  }
+  .itin-day-park{
+    color:var(--sand);
+    flex:1;
+  }
+  .itin-day-park .dot{
+    display:inline-block;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--buoy);
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .itin-day-arrive{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--moss);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+
+  /* --- Print styles --- */
+  @media print{
+    body{background:#fff;color:#222;}
+    .tabs, .filters, .spine-col, .trip-panel, .stepper, .avail-btn, .reset-btn, .start-trip-btn, .date-field, .itin-print-btn, footer.notes{display:none!important;}
+    .view{display:block!important;}
+    .itin-header{background:#f5f5f5;border-color:#ddd;}
+    .itin-header h2{color:#222;}
+    .itin-stop{background:#fff;border-color:#ddd;border-left-color:#d9572e;}
+    .itin-stop-name{color:#222;}
+    .itin-stop-town{color:#666;}
+    .itin-stop-dates{color:#2a7a3e;}
+    .itin-day-park{color:#333;}
+    .itin-day-date{color:#666;}
+    .itin-day-num{color:#d9572e;}
+    .itin-stop-region{border-color:#ddd;color:#666;}
+    .wrap{padding:0;max-width:100%;}
+    .itin-empty{color:#666;}
+    .itin-stop-links a{color:#d9572e;}
+  }
 </style>
 </head>
 <body>
@@ -574,31 +808,40 @@
     <div class="sub">Every state park yurt campground on the Washington and Oregon coast, plus California coastal yurt rentals, arranged in the order you'll actually drive them. Tap a park's + to add nights and build your route.</div>
   </header>
 
-  <div class="filters" id="filters"></div>
+  <div class="tabs">
+    <button class="tab active" data-view="browse">Parks</button>
+    <button class="tab" data-view="itinerary">Itinerary</button>
+  </div>
 
-  <div class="layout">
-    <div class="spine-col">
-      <svg id="spineSvg" viewBox="0 0 64 900" preserveAspectRatio="none"></svg>
-    </div>
+  <div class="view active" id="browseView">
+    <div class="filters" id="filters"></div>
 
-    <div id="cardList"></div>
-
-    <div class="trip-panel">
-      <h2>Your route</h2>
-      <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
-      <a class="start-trip-btn" id="startTripBtn" href="#cardList">
-        Start trip &mdash; browse parks
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
-      </a>
-      <div class="date-field">
-        <label for="tripStart">Trip start date</label>
-        <input type="date" id="tripStart" />
+    <div class="layout">
+      <div class="spine-col">
+        <svg id="spineSvg" viewBox="0 0 64 900" preserveAspectRatio="none"></svg>
       </div>
-      <div id="tripBody"></div>
-      <div class="totals" id="totalsBody"></div>
-      <button class="reset-btn" id="resetBtn">Clear trip</button>
+
+      <div id="cardList"></div>
+
+      <div class="trip-panel">
+        <h2>Your route</h2>
+        <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
+        <a class="start-trip-btn" id="startTripBtn" href="#cardList">
+          Start trip &mdash; browse parks
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
+        </a>
+        <div class="date-field">
+          <label for="tripStart">Trip start date</label>
+          <input type="date" id="tripStart" />
+        </div>
+        <div id="tripBody"></div>
+        <div class="totals" id="totalsBody"></div>
+        <button class="reset-btn" id="resetBtn">Clear trip</button>
+      </div>
     </div>
   </div>
+
+  <div class="view" id="itineraryView"></div>
 
   <footer class="notes">
     <strong>Before you book:</strong> each park card links to its official state parks page with a reservation button. For Oregon parks, call 800-452-5687; for Washington parks, call (888) 226-7688. Yurts are popular and fill up fast — some (like Beverly Beach) get reserved up to nine months out. Rustic yurts run roughly $42&ndash;$62/night plus lodging tax; deluxe yurts (private bath, kitchenette) run $81&ndash;$99. Bring your own bedding — beds have vinyl mattresses only, and cooking indoors is limited to deluxe units with a provided microwave. Washington's coastal parks also require a Discover Pass for day-use vehicle entry (not needed if you're staying overnight in a yurt).
@@ -833,7 +1076,101 @@ function renderTrip(){
     <div class="budget-bar"><div class="budget-fill" style="width:${pct}%; background:${color};"></div></div>
     <div class="budget-msg">${msg}</div>
   `;
+
+  renderItinerary();
 }
+
+function renderItinerary(){
+  const el = document.getElementById('itineraryView');
+  const selected = PARKS.filter(p => state[p.id] > 0);
+  const totalNights = selected.reduce((s,p)=>s+state[p.id],0);
+
+  if(selected.length === 0){
+    el.innerHTML = `<div class="itin-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><path d="M12 18v-4M12 12h.01"/></svg>
+      <div>No stops yet. <br>Go to <strong>Parks</strong> tab, tap + to add nights and build your trip.</div>
+    </div>`;
+    return;
+  }
+
+  const startDate = tripStart || addDays(new Date(), 7);
+  const endDate = addDays(startDate, totalNights);
+
+  let stopsHtml = selected.map((p,i)=>{
+    const checkIn = addDays(startDate, cumulativeNightsBefore(selected, i));
+    const checkOut = addDays(checkIn, state[p.id]);
+    return `
+      <div class="itin-stop">
+        <div class="itin-stop-header">
+          <span class="itin-stop-idx">Stop ${String(i+1).padStart(2,'0')}</span>
+          <span class="itin-stop-name">${p.name}</span>
+          <span class="itin-stop-town">${p.town}</span>
+          <span class="itin-stop-region">${p.region} Coast</span>
+        </div>
+        <div class="itin-stop-dates"><strong>${fmtDate(checkIn)}</strong> \u2192 <strong>${fmtDate(checkOut)}</strong> &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
+        <div class="itin-stop-tags">${p.tags.map(t=>`<span class="itin-stop-tag">${t}</span>`).join('')}</div>
+        <div class="itin-stop-links">
+          <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
+            Reserve
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  let daysHtml = '';
+  if(tripStart){
+    let dayIdx = 0;
+    daysHtml = selected.map(p=>{
+      const stayNights = state[p.id];
+      const arrive = addDays(tripStart, cumulativeNightsBefore(selected, selected.indexOf(p)));
+      let days = '';
+      for(let n=0; n<stayNights; n++){
+        const d = addDays(arrive, n);
+        days += `
+          <div class="itin-day">
+            <span class="itin-day-num">Day ${dayIdx+1}</span>
+            <span class="itin-day-date">${fmtShort(d)}</span>
+            <span class="itin-day-park"><span class="dot"></span>${p.name}</span>
+            ${n===0 ? '<span class="itin-day-arrive">Check in</span>' : ''}
+          </div>
+        `;
+        dayIdx++;
+      }
+      return days;
+    }).join('');
+  }
+
+  el.innerHTML = `
+    <div class="itin-header">
+      <h2>Your Pacific Coast Yurt Itinerary</h2>
+      <div class="itin-meta">
+        ${tripStart ? `<strong>${fmtDate(startDate)}</strong> \u2013 <strong>${fmtDate(endDate)}</strong>` : 'Set a start date in the trip panel'}
+        &middot; <strong>${selected.length}</strong> stop${selected.length>1?'s':''} &middot; <strong>${totalNights}</strong> night${totalNights>1?'s':''}
+      </div>
+      <div class="itin-actions">
+        <button class="itin-print-btn" onclick="window.print()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+          Print itinerary
+        </button>
+      </div>
+    </div>
+    ${stopsHtml}
+    ${daysHtml ? `<div class="itin-days"><div class="itin-days-title">Day-by-day breakdown</div>${daysHtml}</div>` : ''}
+  `;
+}
+
+function showView(view){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id.replace('View','')===view));
+}
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    showView(tab.dataset.view);
+  });
+});
 
 function cumulativeNightsBefore(selected, index){
   let sum = 0;
@@ -852,6 +1189,7 @@ renderFilters();
 renderCards();
 renderSpine();
 renderTrip();
+renderItinerary();
 </script>
 </body>
 </html>
