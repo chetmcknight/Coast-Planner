@@ -89,17 +89,25 @@
     gap:0;
   }
   .spine-col{display:none;}
-  .trip-panel{order:-1;}
-  #cardList{order:0;}
+  .trip-panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    margin:0 0 18px;
+  }
+  @media (min-width:600px){
+    .trip-panel{padding:18px; margin:0 0 22px;}
+  }
   @media (min-width:900px){
+    .trip-panel{padding:22px; margin:0 0 28px;}
     .layout{
       display:grid;
-      grid-template-columns:64px 1fr 300px;
+      grid-template-columns:64px 1fr;
       gap:0 28px;
       align-items:start;
     }
     .spine-col{display:block;}
-    .trip-panel{margin-top:0;}
   }
 
   /* --- Coastline spine --- */
@@ -362,12 +370,8 @@
   }
   @media (min-width:900px){
     .trip-panel{
-      position:sticky;
-      top:24px;
       padding:22px;
-      margin:0;
-      max-height:calc(100vh - 48px);
-      overflow-y:auto;
+      margin:0 0 28px;
     }
   }
   .trip-panel h2{
@@ -810,28 +814,27 @@
   <div class="view active" id="browseView">
     <div class="filters" id="filters"></div>
 
+    <div class="trip-panel">
+      <h2>Your route</h2>
+      <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
+      <a class="start-trip-btn" id="startTripBtn" href="#cardList">
+        Start trip &mdash; browse parks
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
+      </a>
+      <div class="date-field">
+        <label for="tripStart">Trip start date</label>
+        <input type="date" id="tripStart" />
+      </div>
+      <div id="tripBody"></div>
+      <div class="totals" id="totalsBody"></div>
+      <button class="reset-btn" id="resetBtn">Clear trip</button>
+    </div>
+
     <div class="layout">
       <div class="spine-col">
         <svg id="spineSvg" viewBox="0 0 64 900" preserveAspectRatio="none"></svg>
       </div>
-
       <div id="cardList"></div>
-
-      <div class="trip-panel">
-        <h2>Your route</h2>
-        <div class="trip-sub">Stops appear here in driving order as you add nights.</div>
-        <a class="start-trip-btn" id="startTripBtn" href="#cardList">
-          Start trip &mdash; browse parks
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M12 19l-6-6M12 19l6-6"/></svg>
-        </a>
-        <div class="date-field">
-          <label for="tripStart">Trip start date</label>
-          <input type="date" id="tripStart" />
-        </div>
-        <div id="tripBody"></div>
-        <div class="totals" id="totalsBody"></div>
-        <button class="reset-btn" id="resetBtn">Clear trip</button>
-      </div>
     </div>
   </div>
 
