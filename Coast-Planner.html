@@ -252,24 +252,6 @@
     .park-meta{gap:14px; font-size:11.5px;}
   }
   .park-meta span{white-space:nowrap;}
-  .reserve-link{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    margin-top:14px;
-    padding:4px 0;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11.5px;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-    color:var(--buoy);
-    text-decoration:none;
-    border-bottom:1px solid transparent;
-    transition:border-color .15s ease, color .15s ease;
-  }
-  .reserve-link:hover{border-bottom-color:var(--buoy); color:#ef7148;}
-  .reserve-link svg{width:11px; height:11px; flex-shrink:0;}
-
   .avail-row{
     display:flex;
     gap:10px;
@@ -804,11 +786,8 @@
     .itin-day-date{color:#666;}
     .itin-day-num{color:#d9572e;}
     .itin-empty{color:#666;}
-    .itin-stop-links a{color:#d9572e;}
-    .reserve-link{color:#d9572e!important;}
     .itin-days{border-top-color:#ddd;}
     .itin-day{border-bottom-color:#eee;}
-    .itin-stop-links{display:none!important;}
   }
 </style>
 </head>
@@ -890,10 +869,6 @@ const PARKS = [
   {id:'el-capitan-canyon', name:'El Capitan Canyon', town:'Santa Barbara, CA', region:'California', yurts:'Yurts, cabins, safari tents', blurb:'A luxury camping resort 30 minutes north of Santa Barbara on the Gaviota Coast, with yurts nestled in a canyon a short walk from the beach.', tags:['Private','Santa Barbara','Glamping'], url:'https://elcapitancanyon.com/'},
 ];
 
-function reserveUrl(p){
-  if(p.url) return p.url;
-  return `https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=${p.parkId}`;
-}
 function availUrl(p){
   if(p.raParkId) return `https://oregonstateparks.reserveamerica.com/unifSearchInterface.do?interface=checkcamp&contractCode=OR&parkId=${p.raParkId}`;
   if(p.url) return p.url;
@@ -999,10 +974,6 @@ function renderCards(){
           ${p.tags.map(t=>`<span>${t}</span>`).join('')}
         </div>
         <div class="avail-row">
-          <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
-            ${p.region === 'Washington' ? 'WA State Parks' : p.region === 'California' ? 'Book now' : 'Oregon State Parks'}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </a>
           <a class="avail-btn" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
             Check availability
@@ -1059,7 +1030,6 @@ function renderTrip(){
           <div class="stop-nights">${p.town} &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
           ${dateLine}
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-            <a class="stop-reserve" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">Reserve &#8599;</a>
             <a class="stop-reserve" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer" style="color:var(--moss)">Check availability &#8599;</a>
           </div>
         </div>
@@ -1123,12 +1093,6 @@ function renderItinerary(){
         <div class="itin-stop-dates"><strong>${fmtDate(checkIn)}</strong> \u2192 <strong>${fmtDate(checkOut)}</strong> &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
         <div class="itin-stop-address">${p.town}</div>
         <div class="itin-stop-tags">${p.tags.map(t=>`<span class="itin-stop-tag">${t}</span>`).join('')}</div>
-        <div class="itin-stop-links">
-          <a class="reserve-link" href="${reserveUrl(p)}" target="_blank" rel="noopener noreferrer">
-            Reserve
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-          </a>
-        </div>
       </div>
     `;
   }).join('');
