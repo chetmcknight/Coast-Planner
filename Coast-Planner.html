@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Pacific Coast Trip Planner</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#122228">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
   :root{
     --bg-deep:#122228;
@@ -24,12 +27,17 @@
   html,body{margin:0;padding:0; width:100%; overflow-x:hidden; scroll-behavior:smooth;}
   html{height:-webkit-fill-available;}
   body{
+    overscroll-behavior:none;
+    -webkit-overflow-scrolling:touch;
     background:var(--bg-deep);
     color:var(--sand);
     font-family:'Inter',sans-serif;
     min-height:100vh;
     min-height:-webkit-fill-available;
   }
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:var(--bg-deep);}
+  ::-webkit-scrollbar-thumb{background:var(--bg-panel-hi);border-radius:3px;}
   .wrap{
     max-width:1200px;
     margin:0 auto;
@@ -89,19 +97,7 @@
     gap:0;
   }
   .spine-col{display:none;}
-  .trip-panel{
-    background:var(--bg-panel);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:16px;
-    margin:0 0 18px;
-  }
   @media (min-width:600px){
-    .trip-panel{padding:18px; margin:0 0 22px;}
-  }
-  @media (min-width:900px){
-    .trip-panel{padding:22px; margin:0 0 28px;}
-    .layout{
       display:grid;
       grid-template-columns:64px 1fr;
       gap:0 28px;
@@ -355,6 +351,13 @@
   }
   @media (max-width:380px){
     .nights-label{display:none;}
+    .stepper button{width:38px;height:38px; font-size:18px;}
+    .park-card{padding:10px 10px 12px;}
+    .park-name{font-size:15px;}
+    .park-blurb{font-size:12.5px;}
+    .avail-btn{padding:5px 10px; font-size:10px;}
+    .park-meta{font-size:10px; gap:6px;}
+    .park-region-tag{font-size:9px;}
   }
 
   /* --- Trip panel --- */
@@ -460,9 +463,11 @@
   .stop-reserve{
     font-family:'IBM Plex Mono',monospace;
     font-size:10.5px;
-    color:var(--buoy);
+    color:var(--moss);
     text-decoration:none;
     letter-spacing:0.03em;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
   .stop-reserve:hover{text-decoration:underline;}
 
@@ -846,17 +851,58 @@ const PARKS = [
   {id:'el-capitan-canyon', name:'El Capitan Canyon', town:'Santa Barbara, CA', region:'California', yurts:'Yurts, cabins, safari tents', blurb:'A luxury camping resort 30 minutes north of Santa Barbara on the Gaviota Coast, with yurts nestled in a canyon a short walk from the beach.', tags:['Private','Santa Barbara','Glamping'], url:'https://elcapitancanyon.com/'},
 
   /* --- Thousand Trails --- */
+
+  /* --- Thousand Trails: Washington --- */
   {id:'tt-oceana', name:'Thousand Trails Oceana', town:'Ocean City, WA', region:'Washington', yurts:'RV & tent sites', blurb:'An oceanfront RV resort on the Washington coast near Ocean Shores, with miles of sandy beach, razor clamming, and world-class sunsets.', tags:['Thousand Trails','Beach access','Clamming'], url:'https://www2.thousandtrails.com/washington/oceana-rv-camping-resort'},
   {id:'tt-long-beach', name:'Thousand Trails Long Beach', town:'Seaview, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A year-round RV campground 1,200 feet from the Pacific on the Long Beach Peninsula, with full hookups and dog-friendly beach access.', tags:['Thousand Trails','Dog-friendly','Full hookups'], url:'https://www2.thousandtrails.com/washington/long-beach-rv-camping-resort'},
+  {id:'tt-birch-bay', name:'Thousand Trails Birch Bay', town:'Blaine, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A family-friendly RV campground near the US/Canada border with a swimming pool, dog park, and saltwater beach access for crabbing and clamming.', tags:['Thousand Trails','Pool','Near Canada'], url:'https://www2.thousandtrails.com/washington/birch-bay-rv-campground'},
+  {id:'tt-chehalis', name:'Thousand Trails Chehalis', town:'Chehalis, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A south-west Washington RV campground convenient to I-5, near Mount St. Helens, with full hookups and a peaceful wooded setting.', tags:['Thousand Trails','Wooded','I-5 access'], url:'https://www2.thousandtrails.com/washington/chehalis-rv-camping-resort'},
+  {id:'tt-crescent-bar', name:'Thousand Trails Crescent Bar', town:'Quincy, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Columbia River RV resort with waterfront access, golf course, swimming pools, and stunning desert canyon views in central Washington.', tags:['Thousand Trails','Waterfront','Golf'], url:'https://www2.thousandtrails.com/washington/crescent-bar-rv-resort'},
+  {id:'tt-friday-creek', name:'Thousand Trails Friday Creek', town:'Burlington, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Skagit Valley RV campground near the San Juan Islands ferry, with a swimming pool, clubhouse, and easy access to hiking and biking trails.', tags:['Thousand Trails','Near ferries','Pool'], url:'https://www2.thousandtrails.com/washington/friday-creek-campground'},
+  {id:'tt-grandy-creek', name:'Thousand Trails Grandy Creek', town:'Concrete, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A North Cascades RV campground on the Skagit River near Concrete, surrounded by old-growth forest and mountain views.', tags:['Thousand Trails','Mountain views','River'], url:'https://www2.thousandtrails.com/washington/grandy-creek-rv-campground'},
+  {id:'tt-la-conner', name:'Thousand Trails La Conner', town:'La Conner, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Skagit Valley RV resort near the historic waterfront town of La Conner, with views of the Cascade Mountains and tulip fields.', tags:['Thousand Trails','Historic town','Mountain views'], url:'https://www2.thousandtrails.com/washington/la-conner-rv-camping-resort'},
+  {id:'tt-leavenworth', name:'Thousand Trails Leavenworth', town:'Leavenworth, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Bavarian-themed RV campground in the Cascade foothills near Leavenworth, with a clubhouse, mini golf, and proximity to hiking and skiing.', tags:['Thousand Trails','Mountain','Bavarian town'], url:'https://www2.thousandtrails.com/washington/leavenworth-rv-campground'},
+  {id:'tt-little-diamond', name:'Thousand Trails Little Diamond', town:'Newport, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A north-east Washington RV campground near the Idaho border, set among pine forests with a swimming pool and easy access to Pend Oreille River recreation.', tags:['Thousand Trails','Forest','Pool'], url:'https://www2.thousandtrails.com/washington/little-diamond-rv-campground'},
+  {id:'tt-mount-vernon', name:'Thousand Trails Mount Vernon', town:'Bow, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Skagit County RV campground near Bow, with a clubhouse, planned activities, and easy access to the San Juan Islands and North Cascades.', tags:['Thousand Trails','Activities','Near islands'], url:'https://www2.thousandtrails.com/washington/mount-vernon-rv-campground'},
+  {id:'tt-paradise', name:'Thousand Trails Paradise', town:'Silver Creek, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A south-west Washington RV campground near Mount St. Helens, with a swimming pool, clubhouse, and beautiful forested grounds.', tags:['Thousand Trails','Near volcano','Pool'], url:'https://www2.thousandtrails.com/washington/paradise-rv-campground'},
+  {id:'tt-tall-chief', name:'Thousand Trails Tall Chief', town:'Fall City, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Snoqualmie Valley RV campground near Fall City, with a pool, basketball court, and easy access to Snoqualmie Falls and Seattle.', tags:['Thousand Trails','Near Seattle','Pool'], url:'https://www2.thousandtrails.com/washington/tall-chief-rv-camping-resort'},
+  {id:'tt-thunderbird', name:'Thousand Trails Thunderbird', town:'Monroe, WA', region:'Washington', yurts:'RV & tent sites', blurb:'A Snohomish County RV campground near Monroe, with a swimming pool, pond fishing, and easy access to Evergreen State Fairgrounds.', tags:['Thousand Trails','Pool','Pond'], url:'https://www2.thousandtrails.com/washington/thunderbird-rv-camping-resort'},
+
+  /* --- Thousand Trails: Oregon --- */
   {id:'tt-seaside', name:'Thousand Trails Seaside', town:'Seaside, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'An Oregon coast RV campground near historic Seaside, with indoor pool, tennis, and easy access to hiking, whale watching, and Lewis & Clark sites.', tags:['Thousand Trails','Indoor pool','Historic area'], url:'https://thousandtrails.com/oregon/seaside-rv-resort'},
   {id:'tt-pacific-city', name:'Thousand Trails Pacific City', town:'Cloverdale, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'An oceanfront RV campground on the central Oregon coast near Pacific City, with nature trails, fishing, clamming, and whale watching.', tags:['Thousand Trails','Ocean views','Hiking'], url:'https://thousandtrails.com/oregon/pacific-city-rv-camping-resort'},
   {id:'tt-whalers-rest', name:'Thousand Trails Whalers Rest', town:'South Beach, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'A beachfront RV resort just 150 yards from the Pacific near Newport, with indoor pool, mini golf, and close to the Oregon Coast Aquarium.', tags:['Thousand Trails','Indoor pool','Near aquarium'], url:'https://thousandtrails.com/oregon/whalers-rest-rv-camping-resort'},
   {id:'tt-south-jetty', name:'Thousand Trails South Jetty', town:'Florence, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'An Oregon coast RV campground on the edge of Honeyman State Park, two miles from the ocean, with pools, tennis, and dune buggy access.', tags:['Thousand Trails','Near dunes','Pools'], url:'https://thousandtrails.com/oregon/south-jetty-rv-camping-resort'},
+  {id:'tt-bend-sunriver', name:'Thousand Trails Bend-Sunriver', town:'Bend, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'A central Oregon RV campground near Bend and Sunriver, surrounded by ponderosa pines with access to hiking, biking, and the Deschutes River.', tags:['Thousand Trails','Mountain','Biking'], url:'https://www2.thousandtrails.com/oregon/bend-sunriver-rv-campground'},
+  {id:'tt-mt-hood-village', name:'Thousand Trails Mt Hood Village', town:'Welches, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'A Mt Hood National Forest RV resort near Welches, with a pool, hot tub, and year-round access to hiking, mountain biking, and skiing.', tags:['Thousand Trails','Mountain','Pool'], url:'https://www2.thousandtrails.com/oregon/mt-hood-village-rv-resort'},
+  {id:'tt-portland-fairview', name:'Thousand Trails Portland Fairview', town:'Fairview, OR', region:'Oregon', yurts:'RV & tent sites', blurb:'A Portland-area RV park near the Columbia River, with a swimming pool, clubhouse, and easy access to downtown Portland, Columbia Gorge, and wine country.', tags:['Thousand Trails','Near Portland','Pool'], url:'https://www2.thousandtrails.com/oregon/portland-fairview-rv-park'},
+
+  /* --- Thousand Trails: California --- */
   {id:'tt-san-francisco', name:'Thousand Trails San Francisco', town:'Pacifica, CA', region:'California', yurts:'RV & tent sites', blurb:'A coastal RV resort just south of San Francisco in Pacifica, with ocean views and easy access to the city and Half Moon Bay.', tags:['Thousand Trails','Near SF','Ocean views'], url:'https://thousandtrails.com/california/san-francisco-rv-resort'},
   {id:'tt-santa-cruz-ranch', name:'Thousand Trails Santa Cruz Ranch', town:'Scotts Valley, CA', region:'California', yurts:'RV & tent sites', blurb:'A Santa Cruz area RV campground six miles north of downtown, close to the Boardwalk, redwoods, and beaches.', tags:['Thousand Trails','Near Santa Cruz','Wooded'], url:'https://thousandtrails.com/california/santa-cruz-ranch-camping-resort'},
   {id:'tt-rancho-oso', name:'Thousand Trails Rancho Oso', town:'Santa Barbara, CA', region:'California', yurts:'Cabins, RV & tent sites', blurb:'A scenic RV campground in the Santa Barbara foothills with horse trails, a swimming pool, and close to coastal beaches and wine country.', tags:['Thousand Trails','Horse trails','Pool'], url:'https://thousandtrails.com/california/rancho-oso-rv-camping-resort'},
   {id:'tt-pacific-dunes', name:'Thousand Trails Pacific Dunes Ranch', town:'Oceano, CA', region:'California', yurts:'RV & tent sites', blurb:'A Central Coast RV resort near Pismo Beach with direct access to the Oceano Dunes, hiking trails, and a swimming pool.', tags:['Thousand Trails','Near dunes','Pismo Beach'], url:'https://thousandtrails.com/california/pacific-dunes-ranch-rv-camping-resort'},
   {id:'tt-oceanside', name:'Thousand Trails Oceanside', town:'Oceanside, CA', region:'California', yurts:'RV & tent sites', blurb:'A Southern California beachside RV resort just north of San Diego, with a pool, dog park, and easy train access to the city.', tags:['Thousand Trails','Near San Diego','Pool'], url:'https://thousandtrails.com/california/oceanside-rv-resort'},
+  {id:'tt-marina-dunes', name:'Thousand Trails Marina Dunes', town:'Marina, CA', region:'California', yurts:'RV & tent sites', blurb:'Yurts and cottages set among the sand dunes just off Highway 1, a short walk from the beach and minutes from Monterey and Cannery Row.', tags:['Thousand Trails','Near Monterey','Dunes'], url:'https://www2.thousandtrails.com/california/marina-dunes-rv-park'},
+  {id:'tt-idyllwild', name:'Thousand Trails Idyllwild', town:'Idyllwild, CA', region:'California', yurts:'RV & tent sites', blurb:'A mountain RV resort in the San Jacinto Mountains near Idyllwild, surrounded by pine forests with hiking trails and crisp mountain air.', tags:['Thousand Trails','Mountain','Hiking'], url:'https://www2.thousandtrails.com/california/idyllwild-rv-resort'},
+  {id:'tt-lake-minden', name:'Thousand Trails Lake Minden', town:'Nicolaus, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sacramento Valley RV resort on Lake Minden near Nicolaus, with a swimming pool, lake fishing, and a relaxed country setting.', tags:['Thousand Trails','Lake','Pool'], url:'https://www2.thousandtrails.com/california/lake-minden-rv-resort'},
+  {id:'tt-lake-of-the-springs', name:'Thousand Trails Lake of the Springs', town:'Oregon House, CA', region:'California', yurts:'RV & tent sites', blurb:'A foothill RV resort on a private lake in the Sierra Nevada foothills near Yuba City, with fishing, hiking, and a heated swimming pool.', tags:['Thousand Trails','Lake','Foothills'], url:'https://www2.thousandtrails.com/california/lake-of-the-springs-rv-resort'},
+  {id:'tt-morgan-hill', name:'Thousand Trails Morgan Hill', town:'Morgan Hill, CA', region:'California', yurts:'RV & tent sites', blurb:'A South Bay Area RV resort in Morgan Hill wine country, with a swimming pool, clubhouse, and easy access to Gilroy Gardens and Silicon Valley.', tags:['Thousand Trails','Wine country','Pool'], url:'https://www2.thousandtrails.com/california/morgan-hill-rv-resort'},
+  {id:'tt-oakzanita-springs', name:'Thousand Trails Oakzanita Springs', town:'Descanso, CA', region:'California', yurts:'RV & tent sites', blurb:'A mountain RV campground in the Cleveland National Forest near Descanso, with a pool, hiking trails, and close to Julian and Lake Cuyamaca.', tags:['Thousand Trails','Mountain','Forest'], url:'https://www2.thousandtrails.com/california/oakzanita-springs-rv-campground'},
+  {id:'tt-palm-springs', name:'Thousand Trails Palm Springs', town:'Palm Desert, CA', region:'California', yurts:'RV & tent sites', blurb:'A Coachella Valley RV resort in Palm Desert, with two swimming pools, golf, pickleball, and close proximity to Palm Springs attractions.', tags:['Thousand Trails','Desert','Pool'], url:'https://www2.thousandtrails.com/california/palm-springs-rv-resort'},
+  {id:'tt-palm-springs-oasis', name:'Thousand Trails Palm Springs Oasis', town:'Cathedral City, CA', region:'California', yurts:'RV & tent sites', blurb:'A Coachella Valley RV resort in Cathedral City, with a heated pool, spa, pickleball, and close to Palm Springs dining and entertainment.', tags:['Thousand Trails','Desert','Hot springs'], url:'https://www2.thousandtrails.com/california/palm-springs-oasis-rv-resort'},
+  {id:'tt-pilot-knob', name:'Thousand Trails Pilot Knob', town:'Winterhaven, CA', region:'California', yurts:'RV & tent sites', blurb:'A Colorado River RV resort near Winterhaven and Yuma, with waterfront access, a swimming pool, and warm desert climate for winter escapes.', tags:['Thousand Trails','River','Winter sun'], url:'https://www2.thousandtrails.com/california/pilot-knob-rv-resort'},
+  {id:'tt-pio-pico', name:'Thousand Trails Pio Pico', town:'Jamul, CA', region:'California', yurts:'RV & tent sites', blurb:'A San Diego-area RV campground near Jamul in the rolling hills of eastern San Diego County, with a swimming pool and close to wineries.', tags:['Thousand Trails','Near San Diego','Pool'], url:'https://www2.thousandtrails.com/california/pio-pico-rv-resort-campground'},
+  {id:'tt-ponderosa', name:'Thousand Trails Ponderosa', town:'Lotus, CA', region:'California', yurts:'RV & tent sites', blurb:'A Gold Country RV resort near Lotus on the South Fork American River, with a pool, river access for rafting, and proximity to Coloma.', tags:['Thousand Trails','River','Gold Country'], url:'https://www2.thousandtrails.com/california/ponderosa-rv-resort'},
+  {id:'tt-yosemite-rv-resort', name:'Thousand Trails Yosemite RV Resort', town:'Coarsegold, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Yosemite National Park's south entrance, with a swimming pool, clubhouse, and easy access to Bass Lake.', tags:['Thousand Trails','Near Yosemite','Pool'], url:'https://www2.thousandtrails.com/california/yosemite-rv-resort'},
+  {id:'tt-russian-river', name:'Thousand Trails Russian River', town:'Cloverdale, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sonoma County RV campground on the Russian River near Cloverdale, with a pool, wine country access, and redwood-shaded sites.', tags:['Thousand Trails','Wine country','River'], url:'https://www2.thousandtrails.com/california/russian-river-rv-campground'},
+  {id:'tt-san-benito', name:'Thousand Trails San Benito', town:'Paicines, CA', region:'California', yurts:'RV & tent sites', blurb:'A central California RV resort near Paicines in the San Benito Valley, with a swimming pool, hiking, and close to Pinnacles National Park.', tags:['Thousand Trails','Near Pinnacles','Pool'], url:'https://www2.thousandtrails.com/california/san-benito-rv-camping-resort'},
+  {id:'tt-snowflower', name:'Thousand Trails Snowflower', town:'Emigrant Gap, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Emigrant Gap on I-80, with a swimming pool and year-round access to hiking, biking, and nearby ski resorts.', tags:['Thousand Trails','Mountain','Ski area'], url:'https://www2.thousandtrails.com/california/snowflower-rv-resort'},
+  {id:'tt-soledad-canyon', name:'Thousand Trails Soledad Canyon', town:'Acton, CA', region:'California', yurts:'RV & tent sites', blurb:'A high desert RV campground near Acton in Soledad Canyon, with a pool, horseback riding, and convenient access to Los Angeles and Vasquez Rocks.', tags:['Thousand Trails','Desert','Near LA'], url:'https://www2.thousandtrails.com/california/soledad-canyon-rv-camping-resort'},
+  {id:'tt-tahoe-valley', name:'Thousand Trails Tahoe Valley', town:'South Lake Tahoe, CA', region:'California', yurts:'RV & tent sites', blurb:'A South Lake Tahoe RV campground near Heavenly Ski Resort and the lake, with a swimming pool and easy access to hiking, biking, and water sports.', tags:['Thousand Trails','Lake Tahoe','Mountain'], url:'https://www2.thousandtrails.com/california/tahoe-valley-campground'},
+  {id:'tt-turtle-beach', name:'Thousand Trails Turtle Beach', town:'Manteca, CA', region:'California', yurts:'RV & tent sites', blurb:'A San Joaquin Valley RV resort on a lake near Manteca, with a swimming pool, fishing, and convenient access to Yosemite and the Bay Area.', tags:['Thousand Trails','Lake','Central Valley'], url:'https://www2.thousandtrails.com/california/turtle-beach-rv-resort'},
+  {id:'tt-wilderness-lakes', name:'Thousand Trails Wilderness Lakes', town:'Menifee, CA', region:'California', yurts:'RV & tent sites', blurb:'A Southern California RV resort in Menifee near Temecula wine country, with two lakes, pickleball, bocce ball, and a swimming pool.', tags:['Thousand Trails','Lakes','Wine country'], url:'https://www2.thousandtrails.com/california/wilderness-lakes-rv-resort'},
+  {id:'tt-yosemite-lakes', name:'Thousand Trails Yosemite Lakes', town:'Groveland, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Groveland and Yosemite's Highway 120 entrance, with a swimming pool and beautiful forested grounds.', tags:['Thousand Trails','Near Yosemite','Forest'], url:'https://www2.thousandtrails.com/california/yosemite-lakes-rv-resort'},
 ];
 
 function availUrl(p){
@@ -1020,7 +1066,7 @@ function renderTrip(){
           <div class="stop-nights">${p.town} &middot; ${state[p.id]} night${state[p.id]>1?'s':''}</div>
           ${dateLine}
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-            <a class="stop-reserve" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer" style="color:var(--moss)">Check availability &#8599;</a>
+            <a class="stop-reserve" href="${availUrl(p)}" target="_blank" rel="noopener noreferrer">Check availability &#8599;</a>
           </div>
         </div>
       </div>
@@ -1157,7 +1203,6 @@ renderFilters();
 renderCards();
 renderSpine();
 renderTrip();
-renderItinerary();
 </script>
 </body>
 </html>
