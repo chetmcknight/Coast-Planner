@@ -1,11 +1,14 @@
 {
   "name": "coast-planner",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.1.0",
+  "description": "Pacific Coast yurt camping trip planner",
+  "main": "index.html",
   "scripts": {
-    "start": "serve -l $PORT",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "serve -l ${PORT:-3000}",
+    "test": "awk '/<script>/{f=1;next} /<\\/script>/{f=0} f' index.html > /tmp/coast-check.js && node --check /tmp/coast-check.js && rm /tmp/coast-check.js && node test/smoke.test.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "repository": {
     "type": "git",
@@ -20,5 +23,8 @@
   "homepage": "https://github.com/chetmcknight/Coast-Planner#readme",
   "dependencies": {
     "serve": "^14.2.6"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
   }
 }

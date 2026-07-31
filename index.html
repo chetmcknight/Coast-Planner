@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Pacific Coast Trip Planner</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Build a yurt camping route down the Washington, Oregon, and California coast. Add nights to state park and Thousand Trails campgrounds, see driving order and dates, and print your itinerary.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#122228">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23122228'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23d9572e' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23f1e7d3'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -34,6 +36,8 @@
     font-family:'Inter',sans-serif;
     min-height:100vh;
     min-height:-webkit-fill-available;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
   }
   ::-webkit-scrollbar{width:6px;height:6px;}
   ::-webkit-scrollbar-track{background:var(--bg-deep);}
@@ -98,6 +102,7 @@
   }
   .spine-col{display:none;}
   @media (min-width:600px){
+    .layout{
       display:grid;
       grid-template-columns:64px 1fr;
       gap:0 28px;
@@ -165,6 +170,10 @@
     .chip{font-size:12px; padding:7px 14px;}
   }
   .chip:hover{border-color:var(--driftwood); color:var(--sand);}
+  .chip{
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
   .chip.active{
     background:var(--driftwood);
     border-color:var(--driftwood);
@@ -754,9 +763,13 @@
   }
 
   /* --- Print styles --- */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none!important; animation:none!important;}
+  }
   @media print{
     body{background:#fff;color:#222;}
-    header.hero, .tabs, .filters, .spine-col, .trip-panel, .stepper, .avail-btn, .reset-btn, .date-field, .itin-print-btn, .itin-header, .itin-days, footer.notes{display:none!important;}
+    header.hero, .tabs, .filters, .spine-col, .trip-panel, .stepper, .avail-btn, .reset-btn, .date-field, .itin-print-btn, .itin-actions, .itin-days, footer.notes{display:none!important;}
     .wrap{padding:0;max-width:100%;}
     .view{display:block!important;}
     #browseView{display:none!important;}
@@ -883,7 +896,6 @@ const PARKS = [
   {id:'tt-rancho-oso', name:'Thousand Trails Rancho Oso', town:'Santa Barbara, CA', region:'California', yurts:'Cabins, RV & tent sites', blurb:'A scenic RV campground in the Santa Barbara foothills with horse trails, a swimming pool, and close to coastal beaches and wine country.', tags:['Thousand Trails','Horse trails','Pool'], url:'https://thousandtrails.com/california/rancho-oso-rv-camping-resort'},
   {id:'tt-pacific-dunes', name:'Thousand Trails Pacific Dunes Ranch', town:'Oceano, CA', region:'California', yurts:'RV & tent sites', blurb:'A Central Coast RV resort near Pismo Beach with direct access to the Oceano Dunes, hiking trails, and a swimming pool.', tags:['Thousand Trails','Near dunes','Pismo Beach'], url:'https://thousandtrails.com/california/pacific-dunes-ranch-rv-camping-resort'},
   {id:'tt-oceanside', name:'Thousand Trails Oceanside', town:'Oceanside, CA', region:'California', yurts:'RV & tent sites', blurb:'A Southern California beachside RV resort just north of San Diego, with a pool, dog park, and easy train access to the city.', tags:['Thousand Trails','Near San Diego','Pool'], url:'https://thousandtrails.com/california/oceanside-rv-resort'},
-  {id:'tt-marina-dunes', name:'Thousand Trails Marina Dunes', town:'Marina, CA', region:'California', yurts:'RV & tent sites', blurb:'Yurts and cottages set among the sand dunes just off Highway 1, a short walk from the beach and minutes from Monterey and Cannery Row.', tags:['Thousand Trails','Near Monterey','Dunes'], url:'https://www2.thousandtrails.com/california/marina-dunes-rv-park'},
   {id:'tt-idyllwild', name:'Thousand Trails Idyllwild', town:'Idyllwild, CA', region:'California', yurts:'RV & tent sites', blurb:'A mountain RV resort in the San Jacinto Mountains near Idyllwild, surrounded by pine forests with hiking trails and crisp mountain air.', tags:['Thousand Trails','Mountain','Hiking'], url:'https://www2.thousandtrails.com/california/idyllwild-rv-resort'},
   {id:'tt-lake-minden', name:'Thousand Trails Lake Minden', town:'Nicolaus, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sacramento Valley RV resort on Lake Minden near Nicolaus, with a swimming pool, lake fishing, and a relaxed country setting.', tags:['Thousand Trails','Lake','Pool'], url:'https://www2.thousandtrails.com/california/lake-minden-rv-resort'},
   {id:'tt-lake-of-the-springs', name:'Thousand Trails Lake of the Springs', town:'Oregon House, CA', region:'California', yurts:'RV & tent sites', blurb:'A foothill RV resort on a private lake in the Sierra Nevada foothills near Yuba City, with fishing, hiking, and a heated swimming pool.', tags:['Thousand Trails','Lake','Foothills'], url:'https://www2.thousandtrails.com/california/lake-of-the-springs-rv-resort'},
@@ -894,7 +906,7 @@ const PARKS = [
   {id:'tt-pilot-knob', name:'Thousand Trails Pilot Knob', town:'Winterhaven, CA', region:'California', yurts:'RV & tent sites', blurb:'A Colorado River RV resort near Winterhaven and Yuma, with waterfront access, a swimming pool, and warm desert climate for winter escapes.', tags:['Thousand Trails','River','Winter sun'], url:'https://www2.thousandtrails.com/california/pilot-knob-rv-resort'},
   {id:'tt-pio-pico', name:'Thousand Trails Pio Pico', town:'Jamul, CA', region:'California', yurts:'RV & tent sites', blurb:'A San Diego-area RV campground near Jamul in the rolling hills of eastern San Diego County, with a swimming pool and close to wineries.', tags:['Thousand Trails','Near San Diego','Pool'], url:'https://www2.thousandtrails.com/california/pio-pico-rv-resort-campground'},
   {id:'tt-ponderosa', name:'Thousand Trails Ponderosa', town:'Lotus, CA', region:'California', yurts:'RV & tent sites', blurb:'A Gold Country RV resort near Lotus on the South Fork American River, with a pool, river access for rafting, and proximity to Coloma.', tags:['Thousand Trails','River','Gold Country'], url:'https://www2.thousandtrails.com/california/ponderosa-rv-resort'},
-  {id:'tt-yosemite-rv-resort', name:'Thousand Trails Yosemite RV Resort', town:'Coarsegold, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Yosemite National Park's south entrance, with a swimming pool, clubhouse, and easy access to Bass Lake.', tags:['Thousand Trails','Near Yosemite','Pool'], url:'https://www2.thousandtrails.com/california/yosemite-rv-resort'},
+  {id:'tt-yosemite-rv-resort', name:'Thousand Trails Yosemite RV Resort', town:'Coarsegold, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Yosemite National Park\'s south entrance, with a swimming pool, clubhouse, and easy access to Bass Lake.', tags:['Thousand Trails','Near Yosemite','Pool'], url:'https://www2.thousandtrails.com/california/yosemite-rv-resort'},
   {id:'tt-russian-river', name:'Thousand Trails Russian River', town:'Cloverdale, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sonoma County RV campground on the Russian River near Cloverdale, with a pool, wine country access, and redwood-shaded sites.', tags:['Thousand Trails','Wine country','River'], url:'https://www2.thousandtrails.com/california/russian-river-rv-campground'},
   {id:'tt-san-benito', name:'Thousand Trails San Benito', town:'Paicines, CA', region:'California', yurts:'RV & tent sites', blurb:'A central California RV resort near Paicines in the San Benito Valley, with a swimming pool, hiking, and close to Pinnacles National Park.', tags:['Thousand Trails','Near Pinnacles','Pool'], url:'https://www2.thousandtrails.com/california/san-benito-rv-camping-resort'},
   {id:'tt-snowflower', name:'Thousand Trails Snowflower', town:'Emigrant Gap, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Emigrant Gap on I-80, with a swimming pool and year-round access to hiking, biking, and nearby ski resorts.', tags:['Thousand Trails','Mountain','Ski area'], url:'https://www2.thousandtrails.com/california/snowflower-rv-resort'},
@@ -902,7 +914,7 @@ const PARKS = [
   {id:'tt-tahoe-valley', name:'Thousand Trails Tahoe Valley', town:'South Lake Tahoe, CA', region:'California', yurts:'RV & tent sites', blurb:'A South Lake Tahoe RV campground near Heavenly Ski Resort and the lake, with a swimming pool and easy access to hiking, biking, and water sports.', tags:['Thousand Trails','Lake Tahoe','Mountain'], url:'https://www2.thousandtrails.com/california/tahoe-valley-campground'},
   {id:'tt-turtle-beach', name:'Thousand Trails Turtle Beach', town:'Manteca, CA', region:'California', yurts:'RV & tent sites', blurb:'A San Joaquin Valley RV resort on a lake near Manteca, with a swimming pool, fishing, and convenient access to Yosemite and the Bay Area.', tags:['Thousand Trails','Lake','Central Valley'], url:'https://www2.thousandtrails.com/california/turtle-beach-rv-resort'},
   {id:'tt-wilderness-lakes', name:'Thousand Trails Wilderness Lakes', town:'Menifee, CA', region:'California', yurts:'RV & tent sites', blurb:'A Southern California RV resort in Menifee near Temecula wine country, with two lakes, pickleball, bocce ball, and a swimming pool.', tags:['Thousand Trails','Lakes','Wine country'], url:'https://www2.thousandtrails.com/california/wilderness-lakes-rv-resort'},
-  {id:'tt-yosemite-lakes', name:'Thousand Trails Yosemite Lakes', town:'Groveland, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Groveland and Yosemite's Highway 120 entrance, with a swimming pool and beautiful forested grounds.', tags:['Thousand Trails','Near Yosemite','Forest'], url:'https://www2.thousandtrails.com/california/yosemite-lakes-rv-resort'},
+  {id:'tt-yosemite-lakes', name:'Thousand Trails Yosemite Lakes', town:'Groveland, CA', region:'California', yurts:'RV & tent sites', blurb:'A Sierra Nevada RV resort near Groveland and Yosemite\'s Highway 120 entrance, with a swimming pool and beautiful forested grounds.', tags:['Thousand Trails','Near Yosemite','Forest'], url:'https://www2.thousandtrails.com/california/yosemite-lakes-rv-resort'},
 ];
 
 function availUrl(p){
@@ -932,7 +944,7 @@ function parseLocalDate(str){
 
 const tripStartInput = document.getElementById('tripStart');
 const today = new Date();
-const todayIso = today.toISOString().slice(0,10);
+const todayIso = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
 tripStartInput.min = todayIso;
 tripStartInput.addEventListener('change', () => {
   tripStart = tripStartInput.value ? parseLocalDate(tripStartInput.value) : null;
@@ -959,9 +971,12 @@ function visibleParks(){
 
 function renderSpine(){
   const svg = document.getElementById('spineSvg');
+  if(window.innerWidth < 600) return;
   const parks = visibleParks();
   const n = parks.length;
-  const top = 20, bottom = 880;
+  const height = svg.clientHeight || 900;
+  if(svg.viewBox.baseVal.height !== height) svg.setAttribute('viewBox', `0 0 64 ${height}`);
+  const top = 20, bottom = height - 20;
   const step = n > 1 ? (bottom - top) / (n - 1) : 0;
   let html = `<path class="spine-line" d="M32 ${top} L32 ${bottom}" />`;
   let lastRegion = null;
@@ -982,11 +997,34 @@ function renderSpine(){
     });
   });
 }
+let spineTimer;
+window.addEventListener('resize', ()=>{
+  clearTimeout(spineTimer);
+  spineTimer = setTimeout(renderSpine, 150);
+});
 
 function flashCard(id){
   highlightId = id;
-  renderCards();
-  setTimeout(()=>{ highlightId = null; renderCards(); }, 1200);
+  const card = document.getElementById('card-'+id);
+  if(card) card.classList.add('highlight');
+  setTimeout(()=>{
+    highlightId = null;
+    if(card) card.classList.remove('highlight');
+  }, 1200);
+}
+
+function updateStop(id){
+  const card = document.getElementById('card-'+id);
+  if(card){
+    card.querySelector('.nights-count').textContent = state[id];
+    card.querySelector('[data-action="minus"]').disabled = state[id] === 0;
+  }
+  const dot = document.querySelector(`#spineSvg circle[data-id="${id}"]`);
+  if(dot){
+    dot.classList.toggle('active', state[id] > 0);
+    dot.setAttribute('r', state[id] > 0 ? 7 : 5);
+  }
+  renderTrip();
 }
 
 function renderCards(){
@@ -1019,9 +1057,9 @@ function renderCards(){
       <div class="stepper">
         <div class="nights-label">Nights</div>
         <div class="stepper-row">
-          <button data-action="minus" data-id="${p.id}" ${nights===0?'disabled':''}>&minus;</button>
+          <button data-action="minus" data-id="${p.id}" aria-label="Remove a night at ${p.name}" ${nights===0?'disabled':''}>&minus;</button>
           <span class="nights-count">${nights}</span>
-          <button data-action="plus" data-id="${p.id}">+</button>
+          <button data-action="plus" data-id="${p.id}" aria-label="Add a night at ${p.name}">+</button>
         </div>
       </div>
     `;
@@ -1032,9 +1070,7 @@ function renderCards(){
       const id = btn.dataset.id;
       if(btn.dataset.action === 'plus') state[id] = Math.min(state[id]+1, 14);
       else state[id] = Math.max(state[id]-1, 0);
-      renderCards();
-      renderSpine();
-      renderTrip();
+      updateStop(id);
     });
   });
 }
@@ -1096,10 +1132,14 @@ function renderTrip(){
     <div class="budget-msg">${msg}</div>
   `;
 
-  renderItinerary();
+  const itinEl = document.getElementById('itineraryView');
+  if(itinEl.classList.contains('active')) renderItinerary();
+  else itineraryDirty = true;
 }
 
+let itineraryDirty = true;
 function renderItinerary(){
+  itineraryDirty = false;
   const el = document.getElementById('itineraryView');
   const selected = PARKS.filter(p => state[p.id] > 0);
   const totalNights = selected.reduce((s,p)=>s+state[p.id],0);
@@ -1183,6 +1223,7 @@ function showView(view){
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
     showView(tab.dataset.view);
+    if(tab.dataset.view === 'itinerary' && itineraryDirty) renderItinerary();
   });
 });
 
