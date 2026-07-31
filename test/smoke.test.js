@@ -18,9 +18,17 @@ const filters = document.getElementById('filters');
 const cardList = document.getElementById('cardList');
 const spineSvg = document.getElementById('spineSvg');
 
-assertTrue(document.querySelectorAll('.park-card').length > 60, 'all parks rendered');
+assertTrue(document.querySelectorAll('.park-card').length === 69, 'all 69 parks rendered');
 assertTrue(filters.children.length === 4, '4 filter chips');
-assertTrue(document.querySelectorAll('.spine-dot').length > 60, 'spine dots rendered');
+assertTrue(document.querySelectorAll('.spine-dot').length === 69, '69 spine dots rendered');
+
+assertTrue(!!document.getElementById('card-marina-dunes'), 'Marina Dunes RV Park card present');
+assertTrue(!!document.getElementById('card-tt-marina-dunes'), 'Thousand Trails Marina Dunes card present');
+assertTrue(
+  document.querySelectorAll('#cardList .park-card').length ===
+  document.querySelectorAll('#cardList .park-card .park-name').length,
+  'every card has a name'
+);
 
 const firstCard = document.querySelector('.park-card');
 const firstId = firstCard.querySelector('[data-action="plus"]').dataset.id;
@@ -47,6 +55,14 @@ const regChip = [...filters.children].find(c => c.dataset.region === 'Oregon');
 click(regChip);
 assertTrue(document.querySelectorAll('.park-card').length > 15, 'Oregon filter applied');
 assertTrue([...filters.children].find(c => c.dataset.region === 'Oregon').classList.contains('active'), 'chip active');
+
+const caChip = [...filters.children].find(c => c.dataset.region === 'California');
+click(caChip);
+assertTrue(!!document.getElementById('card-marina-dunes'), 'Marina Dunes RV Park shows under California filter');
+assertTrue(!!document.getElementById('card-tt-marina-dunes'), 'Thousand Trails Marina Dunes shows under California filter');
+const ttDunesPlus = document.getElementById('card-tt-marina-dunes').querySelector('[data-action="plus"]');
+click(ttDunesPlus);
+assertTrue(document.getElementById('card-tt-marina-dunes').querySelector('.nights-count').textContent === '1', 'delegated stepper works after re-render');
 
 const itinTab = document.querySelector('.tab[data-view="itinerary"]');
 click(itinTab);
