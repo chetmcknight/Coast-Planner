@@ -762,6 +762,9 @@
     letter-spacing:0.04em;
   }
 
+  /* --- Middle-button drag to scroll --- */
+  html.middle-drag, html.middle-drag *{cursor:grabbing!important; user-select:none!important;}
+
   /* --- Print styles --- */
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -1238,6 +1241,43 @@ document.getElementById('cardList').addEventListener('click', (e)=>{
   else state[id] = Math.max(state[id]-1, 0);
   updateStop(id);
 });
+
+const finePointer = typeof window.matchMedia !== 'function' || window.matchMedia('(pointer: fine)').matches;
+if(finePointer){
+  document.addEventListener('mousedown', (e)=>{
+    if(e.button !== 1) return;
+    e.preventDefault();
+    const startX = e.clientX, startY = e.clientY;
+    const baseX = window.scrollX, baseY = window.scrollY;
+    let dragging = false;
+    const suppressClick = (ce)=>{ if(dragging){ ce.stopPropagation(); ce.preventDefault(); } };
+    const onMove = (me)=>{
+      const dx = me.clientX - startX, dy = me.clientY - startY;
+      if(!dragging && Math.hypot(dx, dy) < 4) return;
+      if(!dragging){
+        dragging = true;
+        document.documentElement.classList.add('middle-drag');
+      }
+      window.scrollTo({left: baseX - dx, top: baseY - dy, behavior: 'instant'});
+      me.preventDefault();
+    };
+    const onUp = (me)=>{
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('auxclick', onAux);
+      setTimeout(()=>window.removeEventListener('click', suppressClick, true), 0);
+      if(dragging){
+        document.documentElement.classList.remove('middle-drag');
+        me.preventDefault();
+      }
+    };
+    const onAux = (ae)=>{ if(dragging) ae.preventDefault(); };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('auxclick', onAux);
+    window.addEventListener('click', suppressClick, true);
+  });
+}
 
 renderFilters();
 renderCards();

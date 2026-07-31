@@ -88,5 +88,24 @@ assertTrue(todayLocal === expect, `min date is local today (${todayLocal})`);
 assertTrue(spineSvg.viewBox.baseVal.height >= 600, `spine viewBox height matches container (${spineSvg.viewBox.baseVal.height})`);
 assertTrue(Math.abs(spineSvg.viewBox.baseVal.width - 64) < 0.1, 'spine viewBox width 64');
 
+const scrollCalls = [];
+const origScrollTo = window.scrollTo;
+window.scrollTo = opts => scrollCalls.push(opts);
+const mDown = new window.MouseEvent('mousedown', { bubbles: true, button: 1, clientX: 100, clientY: 100 });
+const mMove = new window.MouseEvent('mousemove', { bubbles: true, button: 1, clientX: 140, clientY: 170 });
+const mMoveSmall = new window.MouseEvent('mousemove', { bubbles: true, button: 1, clientX: 101, clientY: 101 });
+const mUp = new window.MouseEvent('mouseup', { bubbles: true, button: 1, clientX: 140, clientY: 170 });
+document.dispatchEvent(mDown);
+window.dispatchEvent(mMoveSmall);
+assertTrue(scrollCalls.length === 0, 'no scroll below drag threshold');
+window.dispatchEvent(mMove);
+assertTrue(scrollCalls.length === 1, 'scroll starts after threshold');
+assertTrue(scrollCalls[0].left === -40 && scrollCalls[0].top === -70, 'content follows cursor (left -40, top -70)');
+assertTrue(scrollCalls[0].behavior === 'instant', 'drag scroll is instant (ignores smooth)');
+assertTrue(document.documentElement.classList.contains('middle-drag'), 'grabbing cursor class applied');
+window.dispatchEvent(mUp);
+assertTrue(!document.documentElement.classList.contains('middle-drag'), 'grabbing cursor class removed on release');
+window.scrollTo = origScrollTo;
+
 console.log('ALL SMOKE TESTS PASSED');
 window.close();
