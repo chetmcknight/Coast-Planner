@@ -18,9 +18,10 @@ const filters = document.getElementById('filters');
 const cardList = document.getElementById('cardList');
 const spineSvg = document.getElementById('spineSvg');
 
-assertTrue(document.querySelectorAll('.park-card').length === 69, 'all 69 parks rendered');
+assertTrue(document.querySelectorAll('.park-card').length === 73, 'all 73 parks rendered');
 assertTrue(filters.children.length === 4, '4 filter chips');
-assertTrue(document.querySelectorAll('.spine-dot').length === 69, '69 spine dots rendered');
+assertTrue(document.querySelectorAll('.spine-dot').length === 73, '73 spine dots rendered');
+assertTrue(document.querySelectorAll('.legend-item').length === 3, '3 legend items');
 
 assertTrue(!!document.getElementById('card-marina-dunes'), 'Marina Dunes RV Park card present');
 assertTrue(!!document.getElementById('card-tt-marina-dunes'), 'Thousand Trails Marina Dunes card present');
@@ -28,6 +29,31 @@ assertTrue(
   document.querySelectorAll('#cardList .park-card').length ===
   document.querySelectorAll('#cardList .park-card .park-name').length,
   'every card has a name'
+);
+assertTrue(
+  [...document.querySelectorAll('.type-badge')].every(b =>
+    /badge-(state|tt|private)/.test(b.className) && b.textContent.trim().length > 0
+  ),
+  'every card has a typed badge'
+);
+
+const privateIds = ['tillamook-bay-city', 'dew-valley-ranch', 'oceanside-rv', 'atrivers-edge'];
+privateIds.forEach(id => {
+  assertTrue(!!document.getElementById('card-' + id), 'private park card present: ' + id);
+  assertTrue(
+    document.getElementById('card-' + id).querySelector('.type-badge').classList.contains('badge-private'),
+    'private park badge colored: ' + id
+  );
+});
+assertTrue(
+  document.querySelectorAll('.spine-dot.dot-state').length === 18 &&
+  document.querySelectorAll('.spine-dot.dot-tt').length === 46 &&
+  document.querySelectorAll('.spine-dot.dot-private').length === 9,
+  'spine dots colored by type'
+);
+assertTrue(
+  document.querySelector('#card-tillamook-bay-city').querySelector('.type-badge').classList.contains('badge-private'),
+  'tillamook bay city is private'
 );
 
 const firstCard = document.querySelector('.park-card');
